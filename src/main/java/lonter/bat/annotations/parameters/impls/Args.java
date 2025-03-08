@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Annotation;
 
 @ImplParam
-public class Args extends CommandArg {
+public final class Args extends CommandArg {
     @Override
     public @NotNull Object value(@NotNull MessageReceivedEvent e, final @NotNull Annotation at) {
         return removeCommand(e.getMessage().getContentRaw().toLowerCase()

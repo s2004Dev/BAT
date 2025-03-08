@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Annotation;
 
 @ImplRet
-public class Reply extends ReturnType {
+public final class Reply extends ReturnType {
   @Override
   public void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
                      final @NotNull Annotation at) {
