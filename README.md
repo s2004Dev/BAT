@@ -206,7 +206,9 @@ public final class Miscellaneous {
 
 #### Execution
 
-**User**: .ping  
+(the prefix is `!`)
+
+**User**: !ping  
 **BOT**: Pong! Current latency: **5ms**.
 
 #### Observations
