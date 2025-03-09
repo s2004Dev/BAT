@@ -18,7 +18,8 @@ public @interface Help {
    */
   String usage() default "";
   /**
-   * By default, this parameter will allow you to categorize commands.
+   * By default, this parameter will allow you to categorize commands. If left blank the default value will be the
+   * name of the class in which the method is declared.
    */
-  String category() default "miscellaneous";
+  String category() default "";
 }

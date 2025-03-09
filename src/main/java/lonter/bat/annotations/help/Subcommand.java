@@ -13,6 +13,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Subcommand {
   /**
+   * This parameter is used to give the subcommand a name. Leave it blank to use the method's name instead.
+   */
+  String name() default "";
+  /**
    * Use this parameter to define who's the original command.
    */
   String parent();

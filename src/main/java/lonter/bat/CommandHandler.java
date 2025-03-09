@@ -23,15 +23,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+/**
+ * This class is essential to make the library work correctly. You must call the `invoke()` function in your
+ * bot handling class.
+ */
 @Component
-public final class CommandCallHandler {
-  @Value("${app.prefix}")
+public final class CommandHandler {
+  @Value("${app.prefix:#{null}}")
   private String prefix;
 
-  @Value("${app.embedColor}")
+  @Value("${app.embedColor:#{null}}")
   private String color;
 
-  @Value("${app.groupId}")
+  @Value("${app.groupId:#{null}}")
   private String groupId;
 
   private final ApplicationContext applicationContext;
@@ -42,12 +46,12 @@ public final class CommandCallHandler {
   private Set<Class<?>> implRet;
   private Set<Class<?>> help;
 
-  public CommandCallHandler(final @NotNull ApplicationContext applicationContext) {
+  private CommandHandler(final @NotNull ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
   @PostConstruct
-  public void init() {
+  private void init() {
     if(prefix == null) {
       System.err.println("`prefix` cannot be null: please, set an app.prefix value in your property file.");
       System.exit(-1);
@@ -117,7 +121,7 @@ public final class CommandCallHandler {
 
         atParam.forEach(at -> {
           if(at.getSimpleName().equals(impl.getSimpleName())) // noinspection unchecked
-              injections.put((Class<? extends Annotation>) at, commandArg);
+            injections.put((Class<? extends Annotation>) at, commandArg);
         });
       }
 
@@ -130,13 +134,13 @@ public final class CommandCallHandler {
       final var instance = applicationContext.getBean(i);
 
       for(final var method: i.getDeclaredMethods())
-        if(method.isAnnotationPresent(CommandCall.class))
+        if(method.isAnnotationPresent(Command.class))
           invokables.add(new Invokable(instance, method));
     });
 
     for(final var invokable: invokables) {
       final var method = invokable.method;
-      final var value = method.getAnnotation(CommandCall.class).value();
+      final var value = method.getAnnotation(Command.class).value();
 
       if(!command.equalsIgnoreCase(prefix + (value.isEmpty() ? method.getName() : value)))
         continue;
@@ -202,34 +206,52 @@ public final class CommandCallHandler {
 
     final var categories = new HashSet<String>();
     final var helpAts = new HashMap<String, Help>();
+    final var helpCategories = new HashMap<Help, String>();
     final var subcommands = new HashMap<String, Subcommand>();
 
     commandClass.forEach(at -> {
       for(final var method: at.getDeclaredMethods()) {
-        if(method.isAnnotationPresent(Help.class)) {
+        if(method.isAnnotationPresent(Command.class) &&
+          method.isAnnotationPresent(Help.class)) {
           final var help = method.getAnnotation(Help.class);
+          final var command = method.getAnnotation(Command.class);
 
-          helpAts.put(method.getName(), help);
-          categories.add(help.category());
+          helpAts.put(command.value().isBlank() ? method.getName() : command.value(), help);
+
+          var category = help.category().isBlank() ?
+            at.getAnnotation(CommandClass.class).value() : help.category();
+
+          category = category.isBlank() ? at.getSimpleName().toLowerCase() : category.toLowerCase();
+
+          categories.add(category);
+          helpCategories.put(help, category);
         }
 
-        else if(method.isAnnotationPresent(Subcommand.class))
-          subcommands.put(method.getName(), method.getAnnotation(Subcommand.class));
+        else if(method.isAnnotationPresent(Subcommand.class)) {
+          final var subcommand = method.getAnnotation(Subcommand.class);
+          subcommands.put(subcommand.name().isBlank() ? method.getName() : subcommand.name(), subcommand);
+        }
       }
     });
 
-    if(splitted.length == 1) {
+    if(helpAts.isEmpty()) {
+      e.getChannel().sendMessage("No commands registered.").queue();
+      return;
+    }
+
+    if(splitted.length == 1 && categories.size() > 1) {
       sendEmbed(e, categories, "Categories", "category");
       return;
     }
 
-    final var value = splitted[1].toLowerCase().trim();
+    final var value = (splitted.length == 1 && categories.size() == 1) ? categories.iterator().next() :
+      splitted[1].toLowerCase().trim();
 
     if(categories.contains(value)) {
       final var commands = new HashSet<String>();
 
       helpAts.forEach((name, help) -> {
-        if(!help.category().equalsIgnoreCase(value))
+        if(!helpCategories.get(help).equalsIgnoreCase(value))
           return;
 
         commands.add(name);
@@ -265,14 +287,14 @@ public final class CommandCallHandler {
           .append(subcommand.description());
       });
 
-      var desc = "**Category:** " + help.category() + "\n**Usage:** " +
+      var desc = "**Category:** " + toCamelCase(helpCategories.get(help)) + "\n**Usage:** " +
         prefix + name;
 
       if(!help.usage().isBlank())
         desc += " " + help.usage();
 
       desc += "\n\n\n**Description:**\n\n" + help.description() + (!subDesc.toString().isEmpty() ?
-        "\n\n\n**Subcommands:**\n\n" + subDesc + "." : "");
+        "\n\n\n**Subcommands:**\n\n" + subDesc : "");
 
       sendEmbed(e, toCamelCase(name), desc);
       found.set(true);
@@ -282,26 +304,30 @@ public final class CommandCallHandler {
       e.getMessage().getChannel().sendMessage("No corresponding commands found.").queue();
   }
 
+  private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
+                         final @NotNull String description, final @NotNull String footer) {
+    final var embed = new EmbedBuilder();
+
+    embed.setTitle(title);
+
+    try {
+      embed.setColor(Color.decode(color));
+    } catch (final @NotNull Exception _) { }
+
+    embed.setDescription(description);
+    embed.setFooter(footer);
+
+    e.getMessage().getChannel().sendMessageEmbeds(embed.build()).queue();
+  }
+
   private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull HashSet<String> list,
                          final @NotNull String title, final @NotNull String object) {
     final var sorted = new ArrayList<>(list);
     Collections.sort(sorted);
 
     sendEmbed(e, title, "- **" + String.join("**;\n- **", sorted.stream()
-      .map(CommandCallHandler::toCamelCase).toList()) + "**.",
+        .map(CommandHandler::toCamelCase).toList()) + "**.",
       "To see more information about each " + object + " type `" + prefix + "help <" + object +  ">`.");
-  }
-
-  private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
-                         final @NotNull String description, final @NotNull String footer) {
-    final var embed = new EmbedBuilder();
-
-    embed.setTitle(title);
-    embed.setColor(Color.decode(color));
-    embed.setDescription(description);
-    embed.setFooter(footer);
-
-    e.getMessage().getChannel().sendMessageEmbeds(embed.build()).queue();
   }
 
   private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
@@ -314,7 +340,7 @@ public final class CommandCallHandler {
       return input;
 
     return Arrays.stream(input.split("\\s+")).map(word ->
-      word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+        word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
       .collect(Collectors.joining(" "));
   }
 

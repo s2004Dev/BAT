@@ -1,2 +1,3 @@
 1. Sender logics;
-2. README.md file.
+2. Complete README.md file;
+3. Bug testing.
