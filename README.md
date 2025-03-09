@@ -36,6 +36,22 @@ commands, though only if annotated with the `@Command` annotation (their name wi
 value will be what the bot will send as an output.
 - See the final command by typing on Discord, in a channel the BOT has access to, the prefix + the name of the command.
 
+#### Warning:
+
+If the bot doesn't start and gives you an error about not finding certain classes it might be a problem related with
+the packages. In that case you might want to be sure that your groupId includes the library as well and if your main
+is in a different package then the library you might want to adopt this solution:
+
+```java
+@SpringBootApplication
+@ComponentScan(basePackages = { "your.application.package", "lonter.bat" })
+public class App {
+    void main(final String @NotNull[] args) {
+        SpringApplication.run(App.class, args);
+    }
+}
+```
+
 ## BAT concepts
 
 ### What's a category?
