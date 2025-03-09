@@ -196,7 +196,7 @@ not the user who sent the message. By default, it's set on false (no mention).
 
 ```java
 @CommandClass
-public class Miscellaneous {
+public final class Miscellaneous {
   @Command @Help(description = "Will return the current ping.")
   public @NotNull String ping(final @Event @NotNull MessageReceivedEvent e) {
     return "Pong! Current latency: **" + e.getJDA().getGatewayPing() + "ms**.";
