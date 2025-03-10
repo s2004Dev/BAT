@@ -13,17 +13,21 @@ import java.lang.annotation.Annotation;
 
 @ImplRet
 public final class Reply extends ReturnType {
-  @Value("${app.embedColor:#{null}}")
+  @Value("${javamon.embedColor:#{null}}")
   private String color;
 
   @Override
   public void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
                      final @NotNull Annotation at) {
-    if(at instanceof lonter.bat.annotations.rets.ats.Reply reply) {
-      if(output instanceof String s)
-        e.getMessage().reply(s).mentionRepliedUser(reply.value()).queue();
+    if(!(at instanceof lonter.bat.annotations.rets.ats.Reply reply)) {
+      System.err.println("An error occurred in Reply action.");
+      return;
+    }
 
-      else if(output instanceof EmbedBuilder embed) {
+    switch(output) {
+      case String s -> e.getMessage().reply(s).mentionRepliedUser(reply.value()).queue();
+
+      case EmbedBuilder embed -> {
         try {
           embed.setColor(Color.decode(color));
         } catch(final @NotNull Exception _) { }
@@ -31,7 +35,7 @@ public final class Reply extends ReturnType {
         e.getMessage().replyEmbeds(embed.build()).queue();
       }
 
-      else {
+      default -> {
         System.err.println("The output type was not recognized.");
         System.err.println(output);
         System.err.println(at);

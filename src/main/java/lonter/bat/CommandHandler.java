@@ -194,10 +194,12 @@ public final class CommandHandler {
       }
 
       catch(final @NotNull Exception ex) {
-        ex.printStackTrace();
-      }
+        if(ex instanceof IllegalArgumentException)
+          System.err.println(invokable.method.getName() + " has an illegal argument type.");
 
-      return;
+        else
+          ex.printStackTrace();
+      }
     }
   }
 
