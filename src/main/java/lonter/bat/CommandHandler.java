@@ -10,11 +10,11 @@ import lonter.bat.annotations.rets.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+import org.reflections.Reflections;
 
 import java.awt.Color;
 import java.lang.annotation.Annotation;
@@ -188,7 +188,10 @@ public final class CommandHandler {
           channel.sendMessage(message).queue();
 
         else if(output instanceof EmbedBuilder embed) {
-          embed.setColor(Color.decode(color));
+          try {
+            embed.setColor(Color.decode(color));
+          } catch(final @NotNull Exception _) { }
+
           channel.sendMessageEmbeds(embed.build()).queue();
         }
       }
@@ -214,7 +217,7 @@ public final class CommandHandler {
     commandClass.forEach(at -> {
       for(final var method: at.getDeclaredMethods()) {
         if(method.isAnnotationPresent(Command.class) &&
-          method.isAnnotationPresent(Help.class)) {
+           method.isAnnotationPresent(Help.class)) {
           final var help = method.getAnnotation(Help.class);
           final var command = method.getAnnotation(Command.class);
 
@@ -314,7 +317,7 @@ public final class CommandHandler {
 
     try {
       embed.setColor(Color.decode(color));
-    } catch (final @NotNull Exception _) { }
+    } catch(final @NotNull Exception _) { }
 
     embed.setDescription(description);
     embed.setFooter(footer);
@@ -328,7 +331,7 @@ public final class CommandHandler {
     Collections.sort(sorted);
 
     sendEmbed(e, title, "- **" + String.join("**;\n- **", sorted.stream()
-        .map(CommandHandler::toCamelCase).toList()) + "**.",
+      .map(CommandHandler::toCamelCase).toList()) + "**.",
       "To see more information about each " + object + " type `" + prefix + "help <" + object +  ">`.");
   }
 
@@ -342,7 +345,7 @@ public final class CommandHandler {
       return input;
 
     return Arrays.stream(input.split("\\s+")).map(word ->
-        word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+      word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
       .collect(Collectors.joining(" "));
   }
 
