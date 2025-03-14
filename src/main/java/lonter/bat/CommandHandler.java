@@ -213,7 +213,7 @@ public final class CommandHandler {
     final var splitted = e.getMessage().getContentRaw().split(" ");
 
     final var categories = new HashSet<String>();
-    final var helpAts = new HashMap<String, Help>();
+    final var helpAts = new HashMap<ArrayList<String>, Help>();
     final var helpCategories = new HashMap<Help, String>();
     final var subcommands = new HashMap<String, Subcommand>();
 
@@ -224,7 +224,12 @@ public final class CommandHandler {
           final var help = method.getAnnotation(Help.class);
           final var command = method.getAnnotation(Command.class);
 
-          helpAts.put(command.value().isBlank() ? method.getName() : command.value(), help);
+          final var names = new ArrayList<>(List.of(command.value().isBlank() ? method.getName() :
+            command.value()));
+
+          names.addAll(Arrays.stream(command.aliases()).toList());
+
+          helpAts.put(names, help);
 
           var category = help.category().isBlank() ?
             at.getAnnotation(CommandClass.class).value() : help.category();
@@ -262,7 +267,7 @@ public final class CommandHandler {
         if(!helpCategories.get(help).equalsIgnoreCase(value))
           return;
 
-        commands.add(name);
+        commands.add(name.getFirst());
       });
 
       sendEmbed(e, commands, toCamelCase(value), "command");
@@ -272,21 +277,21 @@ public final class CommandHandler {
 
     final var found = new AtomicBoolean(false);
 
-    helpAts.forEach((name, help) -> {
-      if(!name.equalsIgnoreCase(value))
+    helpAts.forEach((names, help) -> {
+      if(names.stream().noneMatch(s -> s.equalsIgnoreCase(value)))
         return;
 
       final var subDesc = new StringBuilder();
       final var sorted = new TreeMap<>(subcommands);
 
       sorted.forEach((subName, subcommand) -> {
-        if(!subcommand.parent().equalsIgnoreCase(name))
+        if(names.stream().noneMatch(s -> subcommand.parent().equalsIgnoreCase(s)))
           return;
 
         if(!subDesc.toString().isEmpty())
           subDesc.append(";\n");
 
-        subDesc.append("- **").append(prefix).append(name).append(" ").append(subName);
+        subDesc.append("- **").append(prefix).append(names.getFirst()).append(" ").append(subName);
 
         if(!subcommand.usage().isBlank())
           subDesc.append(" ").append(subcommand.usage());
@@ -295,8 +300,10 @@ public final class CommandHandler {
           .append(subcommand.description());
       });
 
-      var desc = "**Category:** " + toCamelCase(helpCategories.get(help)) + "\n**Usage:** " +
-        prefix + name;
+      final var aliases = names.subList(1, names.size());
+
+      var desc = (!aliases.isEmpty() ? "**Aliases:** " + String.join(", " ,aliases) : "") +
+        "\n**Category:** " + toCamelCase(helpCategories.get(help)) + "\n**Usage:** " + prefix + names.getFirst();
 
       if(!help.usage().isBlank())
         desc += " " + help.usage();
@@ -304,7 +311,7 @@ public final class CommandHandler {
       desc += "\n\n\n**Description:**\n\n" + help.description() + (!subDesc.toString().isEmpty() ?
         "\n\n\n**Subcommands:**\n\n" + subDesc : "");
 
-      sendEmbed(e, toCamelCase(name), desc);
+      sendEmbed(e, toCamelCase(names.getFirst()), desc);
       found.set(true);
     });
 

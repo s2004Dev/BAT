@@ -20,5 +20,5 @@ public @interface Command {
   /**
    * If a command can be called with different names.
    */
-  String[] aliases() default "";
+  String[] aliases() default { };
 }
