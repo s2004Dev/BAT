@@ -142,8 +142,10 @@ Used to annotate a method and mark it as a command. This Annotation can only be 
 `@CommandClass` annotation.
 
 **The name of the method will be used to name the command, unless stated otherwise.**  
-If you don't want the command to have the same name as the method you can use the parameter`value` to give them a
+If you don't want the command to have the same name as the method you can use the parameter `value` to give them a
 different one.
+
+You can call the command with multiple different names at the same time with the parameter `aliases`. 
 
 ### @Help
 

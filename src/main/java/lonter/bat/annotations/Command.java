@@ -16,4 +16,9 @@ public @interface Command {
    * This parameter is used to give the command a name. Leave it blank to use the method's name instead.
    */
   String value() default "";
+
+  /**
+   * If a command can be called with different names.
+   */
+  String[] aliases() default "";
 }

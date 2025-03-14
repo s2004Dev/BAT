@@ -140,9 +140,12 @@ public final class CommandHandler {
 
     for(final var invokable: invokables) {
       final var method = invokable.method;
-      final var value = method.getAnnotation(Command.class).value();
+      final var commandAt = method.getAnnotation(Command.class);
+      final var value = commandAt.value();
 
-      if(!command.equalsIgnoreCase(prefix + (value.isEmpty() ? method.getName() : value)))
+      if(!command.equalsIgnoreCase(prefix + (value.isEmpty() ? method.getName() : value)) &&
+         Arrays.stream(commandAt.aliases()).noneMatch(alias ->
+           command.equalsIgnoreCase(prefix + alias)))
         continue;
 
       final var parameters = method.getParameters();
