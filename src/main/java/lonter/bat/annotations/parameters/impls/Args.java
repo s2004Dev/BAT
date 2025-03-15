@@ -12,7 +12,13 @@ import java.lang.annotation.Annotation;
 public final class Args extends CommandArg {
     @Override
     public @NotNull Object value(@NotNull MessageReceivedEvent e, final @NotNull Annotation at) {
-        return removeCommand(e.getMessage().getContentRaw().toLowerCase()
-          .replaceAll("\\s+", " "), false);
+        if(!(at instanceof lonter.bat.annotations.parameters.ats.Args args)) {
+            System.err.println("An error occurred in Reply action.");
+            return new String[]{ };
+        }
+
+        final var input = e.getMessage().getContentRaw();
+        return removeCommand(args.value() ? input : input.toLowerCase()
+          .replaceAll("\\s+", " "));
     }
 }

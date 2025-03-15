@@ -25,18 +25,13 @@ public abstract class CommandArg {
     /**
      * Utility to remove the first element from a string (in this case the command from the args).
      * @param input the original string with prefix, command and arguments.
-     * @param pristine use this flag to state if you want this function to also trim and lowercase your text or not.
      * @return an array of string containing only the arguments.
      */
-    protected static String @NotNull[] removeCommand(final @NotNull String input, final boolean pristine) {
+    protected static String @NotNull[] removeCommand(final @NotNull String input) {
         final var array = input.split(" ");
         final var newArray = new String[array.length-1];
 
         System.arraycopy(array, 1, newArray, 0, newArray.length);
-
-        if(pristine)
-            for(var i = 0; i < newArray.length; i++)
-                newArray[i] = newArray[i].trim();
 
         return newArray;
     }

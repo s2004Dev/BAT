@@ -181,16 +181,13 @@ command without the command itself, trimmed and lowercased.
 
 It only works if the method is annotated with `@Command`.
 
+- Parameter **value**: This is an optional value, set it to true if you want the annotation to inject into your method
+an array of strings containing the original arguments of the called command without any modification. By default, it's
+set on false.
+
 #### @Event
 
 Used to annotate a parameter in a method, it will inject the base event of a Discord message.
-
-It only works if the method is annotated with `@Command`.
-
-#### @Pristine
-
-Used to annotate a parameter in a method, it will inject an array of strings containing the original arguments of a
-called command without any modification.
 
 It only works if the method is annotated with `@Command`.
 
