@@ -28,9 +28,11 @@ public final class Reply extends ReturnType {
       case String s -> e.getMessage().reply(s).mentionRepliedUser(reply.value()).queue();
 
       case EmbedBuilder embed -> {
-        try {
-          embed.setColor(Color.decode(color));
-        } catch(final @NotNull Exception _) { }
+        if(embed.build().getColor() == null) {
+          try {
+            embed.setColor(Color.decode(color));
+          } catch(final @NotNull Exception _) { }
+        }
 
         e.getMessage().replyEmbeds(embed.build()).queue();
       }

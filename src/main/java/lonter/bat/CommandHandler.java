@@ -191,9 +191,11 @@ public final class CommandHandler {
           channel.sendMessage(message).queue();
 
         else if(output instanceof EmbedBuilder embed) {
-          try {
-            embed.setColor(Color.decode(color));
-          } catch(final @NotNull Exception _) { }
+          if(embed.build().getColor() == null) {
+            try {
+              embed.setColor(Color.decode(color));
+            } catch(final @NotNull Exception _) { }
+          }
 
           channel.sendMessageEmbeds(embed.build()).queue();
         }
