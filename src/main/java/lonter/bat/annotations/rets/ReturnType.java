@@ -13,12 +13,12 @@ import java.lang.annotation.Annotation;
  * with {@link ImplRet}.
  */
 public abstract class ReturnType {
-    /**
-     * This function will be called before returning a value to the user.
-     * @param e the Discord message event
-     * @param output what the original function returned
-     * @param at the annotation itself
-     */
-    public abstract void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
-                                final @NotNull Annotation at);
+  /**
+   * This function will be called before returning a value to the user.
+   * @param e the Discord message event
+   * @param output what the original function returned
+   * @param at the annotation itself
+   */
+  public abstract void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
+                              final @NotNull Annotation at);
 }

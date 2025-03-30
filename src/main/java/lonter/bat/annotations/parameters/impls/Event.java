@@ -10,8 +10,8 @@ import java.lang.annotation.Annotation;
 
 @ImplParam
 public final class Event extends CommandArg {
-    @Override
-    public @NotNull Object value(@NotNull MessageReceivedEvent e, final @NotNull Annotation at) {
-        return e;
-    }
+  @Override
+  public @NotNull Object value(@NotNull MessageReceivedEvent e, final @NotNull Annotation at) {
+    return e;
+  }
 }
