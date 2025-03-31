@@ -162,11 +162,14 @@ from the class the command is in. It has priority over the class' category.
 #### Subcommand
 
 Used to annotate a method and register it in the help command. This Annotation can only be used inside a class
-annotated with the `@CommandClass` annotation.
+annotated with the `@CommandClass` annotation. You can mark a method multiple times.
 
 It will be registered as a subcommand of another existing command.
 
-- Parameter **parent**: This parameter is used to tell the library what's the parent command of this subcommand.
+- Parameter **name**: This parameter is used to give the subcommand a name. Leave it blank to use the method's name
+instead.
+- Parameter **parent**: Use this parameter to define who's the original command. Leave it blank to use the method's
+name instead.
 - Parameter **description**: This parameter is the description of the subcommand the final user will see when he will
   call the prefix + `help ` + `<command name>` command.
 - Parameter **usage**: This is an optional parameter that allows you to describe the syntax of the subcommand, by

@@ -242,10 +242,9 @@ public final class CommandHandler {
           helpCategories.put(help, category);
         }
 
-        else if(method.isAnnotationPresent(Subcommand.class)) {
-          final var subcommand = method.getAnnotation(Subcommand.class);
-          subcommands.put(subcommand.name().isBlank() ? method.getName() : subcommand.name(), subcommand);
-        }
+        for(final var subcommand: method.getAnnotationsByType(Subcommand.class))
+          subcommands.put(safe(subcommand.name().isBlank() ? method.getName() : subcommand.name()) + "/" +
+            safe(subcommand.parent().isBlank() ? method.getName() : subcommand.parent()), subcommand);
       }
     });
 
@@ -287,13 +286,15 @@ public final class CommandHandler {
       final var sorted = new TreeMap<>(subcommands);
 
       sorted.forEach((subName, subcommand) -> {
-        if(names.stream().noneMatch(s -> subcommand.parent().equalsIgnoreCase(s)))
+        if(names.stream().noneMatch(name -> (subcommand.parent().isBlank() ? subName : safe(subcommand.parent()))
+          .contains(safe(name))))
           return;
 
         if(!subDesc.toString().isEmpty())
-          subDesc.append(";\n");
+          subDesc.append("\n");
 
-        subDesc.append("- **").append(prefix).append(names.getFirst()).append(" ").append(subName);
+        subDesc.append("- **").append(prefix).append(names.getFirst()).append(" ").append(unsafe(subName
+          .substring(0, subName.indexOf("/"))));
 
         if(!subcommand.usage().isBlank())
           subDesc.append(" ").append(subcommand.usage());
@@ -304,7 +305,7 @@ public final class CommandHandler {
 
       final var aliases = names.subList(1, names.size());
 
-      var desc = (!aliases.isEmpty() ? "**Aliases:** " + String.join(", " ,aliases) : "") +
+      var desc = (!aliases.isEmpty() ? "**Aliases:** " + String.join(", ", aliases) : "") +
         "\n**Category:** " + toCamelCase(helpCategories.get(help)) + "\n**Usage:** " + prefix + names.getFirst();
 
       if(!help.usage().isBlank())
@@ -319,6 +320,14 @@ public final class CommandHandler {
 
     if(!found.get())
       e.getMessage().getChannel().sendMessage("No corresponding commands found.").queue();
+  }
+
+  private static @NotNull String safe(final @NotNull String input) {
+    return Base64.getUrlEncoder().encodeToString(input.getBytes());
+  }
+
+  private static @NotNull String unsafe(final @NotNull String input) {
+    return new String(Base64.getUrlDecoder().decode(input));
   }
 
   private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
