@@ -14,11 +14,19 @@ public @interface Subcommand {
    * This parameter is used to give the subcommand a name. Leave it blank to use the method's name instead.
    */
   String name() default "";
+
+  /**
+   * If a subcommand can be called with different names.
+   */
+  String[] aliases() default { };
+
   /**
    * Use this parameter to define who's the original command. Leave it blank to use the method's name instead.
    */
   String parent() default "";
+
   String description();
+
   /**
    * The name of the function is already written by default, use this parameter only if the subcommand has additional
    * parameters instead of just calling it.

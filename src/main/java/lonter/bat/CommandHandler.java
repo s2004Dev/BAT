@@ -296,6 +296,9 @@ public final class CommandHandler {
         subDesc.append("- **").append(prefix).append(names.getFirst()).append(" ").append(unsafe(subName
           .substring(0, subName.indexOf("/"))));
 
+        if(subcommand.aliases().length > 0)
+          subDesc.append(" (").append(String.join(", ", subcommand.aliases())).append(")");
+
         if(!subcommand.usage().isBlank())
           subDesc.append(" ").append(subcommand.usage());
 

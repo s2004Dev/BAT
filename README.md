@@ -168,6 +168,8 @@ It will be registered as a subcommand of another existing command.
 
 - Parameter **name**: This parameter is used to give the subcommand a name. Leave it blank to use the method's name
 instead.
+- You can mark the subcommand to have multiple different names with the parameter `aliases`, currently it is only
+used for utility only.
 - Parameter **parent**: Use this parameter to define who's the original command. Leave it blank to use the method's
 name instead.
 - Parameter **description**: This parameter is the description of the subcommand the final user will see when he will
