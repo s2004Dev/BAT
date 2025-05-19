@@ -4,4 +4,5 @@
 4. Options system;
 5. Slash commands;
 6. Callable subcommands;
-7. Categories might have spaces.
+7. Categories might have spaces;
+8. Custom return logic.
