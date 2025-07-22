@@ -13,7 +13,7 @@ import java.lang.annotation.Annotation;
 
 @ImplRet
 public final class Reply extends ReturnType {
-  @Value("${javamon.embedColor:#{null}}")
+  @Value("${app.embedColor:#{null}}")
   private String color;
 
   @Override
