@@ -7,14 +7,20 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.Color;
 import java.lang.annotation.Annotation;
 
-@ImplRet
+@ImplRet @Component
 public final class Reply extends ReturnType {
   @Value("${app.embedColor:#{null}}")
   private String color;
+
+  @Override
+  public @NotNull Class<? extends Annotation> getAnnotationType() {
+    return lonter.bat.annotations.rets.ats.Reply.class;
+  }
 
   @Override
   public void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
@@ -31,7 +37,9 @@ public final class Reply extends ReturnType {
         if(embed.build().getColor() == null) {
           try {
             embed.setColor(Color.decode(color));
-          } catch(final @NotNull Exception _) { }
+          }
+
+          catch(final @NotNull Exception _) { }
         }
 
         e.getMessage().replyEmbeds(embed.build()).queue();

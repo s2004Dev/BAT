@@ -14,6 +14,14 @@ import java.lang.annotation.Annotation;
  */
 public abstract class ReturnType {
   /**
+   * Implement this method to declare which parameter annotation this class handles.
+   * This is crucial for the CommandHandler to map annotations to the correct logic.
+   *
+   * @return The .class of the annotation you are handling (e.g., return Reply.class;).
+   */
+  public abstract Class<? extends Annotation> getAnnotationType();
+
+  /**
    * This function will be called before returning a value to the user.
    * @param e the Discord message event
    * @param output what the original function returned

@@ -14,6 +14,14 @@ import java.lang.annotation.Annotation;
  */
 public abstract class CommandArg {
   /**
+   * Implement this method to declare which parameter annotation this class handles.
+   * This is crucial for the CommandHandler to map annotations to the correct logic.
+   *
+   * @return The .class of the annotation you are handling (e.g., return Args.class;).
+   */
+  public abstract Class<? extends Annotation> getAnnotationType();
+
+  /**
    * This function will be called every time you need to inject your parameter. The return value is what the command
    * will get injected.
    * @param e the Discord message event
