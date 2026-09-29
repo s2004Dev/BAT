@@ -4,13 +4,12 @@ import jakarta.annotation.PostConstruct;
 
 import lombok.val;
 
+import lonter.bat.batobjs.BatEmbed;
+import lonter.bat.batobjs.BatMessageReceivedEvent;
 import lonter.bat.annotations.*;
 import lonter.bat.annotations.help.*;
 import lonter.bat.annotations.parameters.*;
 import lonter.bat.annotations.rets.*;
-
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.awt.Color;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -86,11 +84,13 @@ public final class CommandHandler {
   }
 
   /**
-   * Call this function in the MessageReceivedEvent function of your Discord bot.
-   * @param e the Discord MessageReceivedEvent
+   * Call this function in the MessageReceivedEvent function of your bot.
+   * @param e the BatMessageReceivedEvent
    */
   public void invoke(final @NotNull MessageReceivedEvent e) {
     val input = e.getMessage().getContentRaw();
+  public void invoke(final @NotNull BatMessageReceivedEvent e) {
+    val input = e.message.text();
     val command = input.split(" ")[0];
 
     if(!command.startsWith(prefix))
@@ -134,7 +134,7 @@ public final class CommandHandler {
     }
   }
 
-  private Object @NotNull[] prepareArguments(final @NotNull MessageReceivedEvent e, final @NotNull Method method) {
+  private Object @NotNull[] prepareArguments(final @NotNull BatMessageReceivedEvent e, final @NotNull Method method) {
     val parameters = method.getParameters();
     val args = new Object[parameters.length];
 
@@ -154,7 +154,7 @@ public final class CommandHandler {
     return args;
   }
 
-  private void handleReturnValue(final @NotNull MessageReceivedEvent e, final @NotNull Method method,
+  private void handleReturnValue(final @NotNull BatMessageReceivedEvent e, final @NotNull Method method,
                                  final @Nullable Object output) {
     if(output == null)
       return;
@@ -172,23 +172,23 @@ public final class CommandHandler {
     }
 
     if(output instanceof String message)
-      e.getChannel().sendMessage(message).queue();
+      e.sendMessage(message);
 
-    else if(output instanceof EmbedBuilder embed) {
-      if(embed.build().getColor() == null && color != null) {
+    else if(output instanceof BatEmbed embed) {
+      if(embed.color == null && color != null) {
         try {
-          embed.setColor(Color.decode(color));
+          embed.color = color;
         }
 
         catch(final @NotNull Exception ignored) { }
       }
 
-      e.getChannel().sendMessageEmbeds(embed.build()).queue();
+      e.sendEmbed(embed);
     }
   }
 
-  private void help(final @NotNull MessageReceivedEvent e) {
-    val splitted = e.getMessage().getContentRaw().split(" ");
+  private void help(final @NotNull BatMessageReceivedEvent e) {
+    val splitted = e.message.text().split(" ");
 
     val categories = new HashSet<String>();
     val helpAts = new HashMap<ArrayList<String>, Help>();
@@ -227,12 +227,12 @@ public final class CommandHandler {
     });
 
     if(helpAts.isEmpty()) {
-      e.getChannel().sendMessage("No commands registered.").queue();
+      e.sendMessage("No commands registered.");
       return;
     }
 
     if(splitted.length == 1 && categories.size() > 1) {
-      sendEmbed(e, categories, "Categories", "category");
+      e.sendEmbed(buildEmbed(categories, "Categories", "category"));
       return;
     }
 
@@ -249,7 +249,7 @@ public final class CommandHandler {
         commands.add(name.getFirst());
       });
 
-      sendEmbed(e, commands, toCamelCase(value), "command");
+      e.sendEmbed(buildEmbed(commands, toCamelCase(value), "command"));
 
       return;
     }
@@ -295,12 +295,12 @@ public final class CommandHandler {
       desc += "\n\n\n**Description:**\n\n" + help.description() + (!subDesc.toString().isEmpty() ?
         "\n\n\n**Subcommands:**\n\n" + subDesc : "");
 
-      sendEmbed(e, toCamelCase(names.getFirst()), desc);
+      e.sendEmbed(new BatEmbed(toCamelCase(names.getFirst()), desc, this.color));
       found.set(true);
     });
 
     if(!found.get())
-      e.getMessage().getChannel().sendMessage("No corresponding commands found.").queue();
+      e.sendMessage("No corresponding commands found.");
   }
 
   private static @NotNull String safe(final @NotNull String input) {
@@ -311,37 +311,14 @@ public final class CommandHandler {
     return new String(Base64.getUrlDecoder().decode(input));
   }
 
-  private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
-                         final @NotNull String description, final @NotNull String footer) {
-    val embed = new EmbedBuilder();
-
-    embed.setTitle(title);
-
-    try {
-      embed.setColor(Color.decode(color));
-    }
-
-    catch(final @NotNull Exception _) { }
-
-    embed.setDescription(description);
-    embed.setFooter(footer);
-
-    e.getMessage().getChannel().sendMessageEmbeds(embed.build()).queue();
-  }
-
-  private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull HashSet<String> list,
-                         final @NotNull String title, final @NotNull String object) {
+  private BatEmbed buildEmbed(final @NotNull HashSet<String> list, final @NotNull String title,
+                              final @NotNull String object) {
     val sorted = new ArrayList<>(list);
     Collections.sort(sorted);
 
-    sendEmbed(e, title, "- **" + String.join("**;\n- **", sorted.stream()
+    return new BatEmbed(title, "- **" + String.join("**;\n- **", sorted.stream()
       .map(CommandHandler::toCamelCase).toList()) + "**.", "To see more information about each " + object +
-      " type `" + prefix + "help <" + object +  ">`.");
-  }
-
-  private void sendEmbed(final @NotNull MessageReceivedEvent e, final @NotNull String title,
-                         final @NotNull String description) {
-    sendEmbed(e, title, description, "");
+      " type `" + prefix + "help <" + object +  ">`.", this.color);
   }
 
   private static String toCamelCase(final @NotNull String input) {

@@ -6,7 +6,7 @@
   <parent>
     <groupId> org.springframework.boot </groupId>
     <artifactId> spring-boot-starter-parent </artifactId>
-    <version> 4.0.2 </version>
+    <version> 4.1.1 </version>
   </parent>
 
   <groupId> lonter </groupId>
@@ -16,7 +16,7 @@
   <description> Utilities to easily make a BOT in Java </description>
 
   <properties>
-    <java.version> 23 </java.version>
+    <java.version> 25 </java.version>
   </properties>
 
   <dependencies>
@@ -28,21 +28,21 @@
     <dependency>
       <groupId> org.projectlombok </groupId>
       <artifactId> lombok </artifactId>
-      <version> 1.18.36 </version>
+      <version> 1.18.48 </version>
       <scope> provided </scope>
     </dependency>
 
     <dependency>
       <groupId> org.jetbrains </groupId>
       <artifactId> annotations </artifactId>
-      <version> 24.0.0 </version>
+      <version> 26.1.0 </version>
       <scope> compile </scope>
     </dependency>
 
     <dependency>
       <groupId> net.dv8tion </groupId>
       <artifactId> JDA </artifactId>
-      <version> 5.2.1 </version>
+      <version> 6.7.0 </version>
     </dependency>
   </dependencies>
 
@@ -60,9 +60,8 @@
             </path>
           </annotationProcessorPaths>
 
-          <source> 23 </source>
-          <target> 23 </target>
-          <compilerArgs> --enable-preview </compilerArgs>
+          <source> ${java.version} </source>
+          <target> ${java.version} </target>
         </configuration>
       </plugin>
 

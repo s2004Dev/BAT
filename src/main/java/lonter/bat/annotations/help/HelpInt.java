@@ -1,6 +1,6 @@
 package lonter.bat.annotations.help;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import lonter.bat.batobjs.BatMessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,5 +9,5 @@ import org.jetbrains.annotations.NotNull;
  * <p>The class in which this method is declared must be annotated with the {@link HelpImpl} annotation.
  */
 public interface HelpInt {
-  void help(final @NotNull MessageReceivedEvent e);
+  void help(final @NotNull BatMessageReceivedEvent e);
 }

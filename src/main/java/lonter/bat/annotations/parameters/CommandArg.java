@@ -1,6 +1,6 @@
 package lonter.bat.annotations.parameters;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import lonter.bat.batobjs.BatMessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,11 +24,11 @@ public abstract class CommandArg {
   /**
    * This function will be called every time you need to inject your parameter. The return value is what the command
    * will get injected.
-   * @param e the Discord message event
+   * @param e the message event
    * @param at the annotation itself
    * @return the value to inject
    */
-  public abstract @NotNull Object value(final @NotNull MessageReceivedEvent e, final @NotNull Annotation at);
+  public abstract @NotNull Object value(final @NotNull BatMessageReceivedEvent e, final @NotNull Annotation at);
 
   /**
    * Utility to remove the first element from a string (in this case the command from the args).

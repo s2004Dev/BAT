@@ -1,6 +1,6 @@
 package lonter.bat.annotations.rets;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import lonter.bat.batobjs.BatMessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,10 +23,10 @@ public abstract class ReturnType {
 
   /**
    * This function will be called before returning a value to the user.
-   * @param e the Discord message event
+   * @param e the message event
    * @param output what the original function returned
    * @param at the annotation itself
    */
-  public abstract void action(final @NotNull MessageReceivedEvent e, final @NotNull Object output,
+  public abstract void action(final @NotNull BatMessageReceivedEvent e, final @NotNull Object output,
                               final @NotNull Annotation at);
 }
