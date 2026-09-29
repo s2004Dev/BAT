@@ -87,8 +87,6 @@ public final class CommandHandler {
    * Call this function in the MessageReceivedEvent function of your bot.
    * @param e the BatMessageReceivedEvent
    */
-  public void invoke(final @NotNull MessageReceivedEvent e) {
-    val input = e.getMessage().getContentRaw();
   public void invoke(final @NotNull BatMessageReceivedEvent e) {
     val input = e.message.text();
     val command = input.split(" ")[0];
