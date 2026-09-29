@@ -8,11 +8,11 @@ public abstract class BatUser {
   public final @NotNull String handle;
   public final @NotNull String globalName; // gives handle if not set
   public final @NotNull String localName; // gives globalName if not set
-  public final @Nullable String globalPfpUrl; // might be null if no pfp is set
+  public final @NotNull String globalPfpUrl;
   public final @Nullable String localPfpUrl; // gives globalPfpUrl if not set
 
   public BatUser(final long id, final @NotNull String handle, final @Nullable String globalName,
-                 final @Nullable String localName, final @Nullable String globalPfpUrl,
+                 final @Nullable String localName, final @NotNull String globalPfpUrl,
                  final @Nullable String localPfpUrl) {
     this.id = id;
     this.handle = handle;

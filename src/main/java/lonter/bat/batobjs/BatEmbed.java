@@ -27,6 +27,6 @@ public class BatEmbed {
   }
 
   public BatEmbed(final @NotNull String title, final @NotNull String description, final @NotNull String color) {
-    new BatEmbed(title, description, "", color);
+    this(title, description, "", color);
   }
 }

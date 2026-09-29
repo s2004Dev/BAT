@@ -16,7 +16,7 @@ public class DiscordMRE extends BatMessageReceivedEvent {
 
   public DiscordMRE(final @NotNull MessageReceivedEvent disc) {
     super(new BatMessage(disc.getMessage().getContentRaw()), new DiscordUser(disc.getAuthor()),
-      new DiscordUser(disc.getJDA().getSelfUser()), new DiscordServer(disc.getGuild()),
+      new DiscordUser(disc.getJDA().getSelfUser()), disc.isFromGuild() ? new DiscordServer(disc.getGuild()) : null,
       new DiscordBat(disc.getJDA()));
 
     this.disc = disc;

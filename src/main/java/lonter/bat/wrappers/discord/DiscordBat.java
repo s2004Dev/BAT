@@ -16,8 +16,13 @@ public class DiscordBat extends Bat {
   public final @NotNull JDA jda;
 
   @Override public @Nullable BatUser getUserById(final long id) {
-    val disc = jda.retrieveUserById(id).complete();
-    return disc == null ? null : new DiscordUser(disc);
+    try {
+      return new DiscordUser(jda.retrieveUserById(id).complete());
+    }
+
+    catch(final @NotNull Exception e) {
+      return null;
+    }
   }
 
   @Override public @Nullable BatUser getUserByTag(final @NotNull String tag) {
