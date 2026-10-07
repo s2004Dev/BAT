@@ -66,7 +66,7 @@ public final class CommandHandler {
   @PostConstruct
   private void init() {
     if(prefix == null) {
-      System.err.println("`prefix` cannot be null: please, set an app.prefix value in your property file.");
+      log.error("`prefix` cannot be null: please, set an app.prefix value in your property file.");
       System.exit(-1);
     }
 
@@ -91,7 +91,6 @@ public final class CommandHandler {
    * Call this function in the MessageReceivedEvent function of your bot.
    * @param e the BatMessageReceivedEvent
    */
-  @SuppressWarnings("unused") // FIXME: Do not push.
   public void invoke(final @NotNull BatMRE e) {
     val input = e.message.text;
     val command = input.split(" ")[0];
