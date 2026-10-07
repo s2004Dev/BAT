@@ -1,21 +1,20 @@
-package lonter.bat.wrappers.discord;
+package lonter.bat.wrappers.fluxer;
 
 import lonter.bat.batobjs.*;
-
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import lonter.jfa.api.EmbedBuilder;
+import lonter.jfa.api.events.message.MessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 
-public class DiscordMRE extends BatMRE {
+public class FluxerMRE extends BatMRE {
   private final @NotNull MessageReceivedEvent event;
 
-  public DiscordMRE(final @NotNull MessageReceivedEvent event) {
-    super(new DiscordMessage(event.getMessage()), new DiscordChannel(event.getChannel()),
-      new DiscordUser(event.getAuthor()), new DiscordUser(event.getJDA().getSelfUser()),
-      event.isFromGuild() ? new DiscordServer(event.getGuild()) : null, new DiscordBat(event.getJDA()), "discord");
+  public FluxerMRE(final @NotNull MessageReceivedEvent event) {
+    super(new FluxerMessage(event.getMessage()), new FluxerChannel(event.getChannel()), new FluxerUser(event.getAuthor()),
+      new FluxerUser(event.getJFA().getSelfUser()), event.isFromGuild() ? new FluxerServer(event.getGuild()) : null,
+      new FluxerBat(event.getJFA()), "fluxer");
 
     this.event = event;
   }

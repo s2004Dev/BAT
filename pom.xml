@@ -44,6 +44,12 @@
       <artifactId> JDA </artifactId>
       <version> 6.7.0 </version>
     </dependency>
+
+    <dependency>
+      <groupId> lonter </groupId>
+      <artifactId> jfa </artifactId>
+      <version> 0.1 </version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -51,6 +57,7 @@
       <plugin>
         <groupId> org.apache.maven.plugins </groupId>
         <artifactId> maven-compiler-plugin </artifactId>
+        <version> 3.16.0 </version>
 
         <configuration>
           <annotationProcessorPaths>

@@ -1,10 +1,12 @@
 package lonter.bat.annotations.rets.impls;
 
 import lonter.bat.batobjs.BatEmbed;
-import lonter.bat.batobjs.BatMessageReceivedEvent;
+import lonter.bat.batobjs.BatMRE;
 import lonter.bat.annotations.rets.*;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.lang.annotation.Annotation;
 
 @ImplRet @Component
 public final class Reply extends ReturnType {
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   @Value("${app.embedColor:#{null}}")
   private String color;
 
@@ -19,10 +23,10 @@ public final class Reply extends ReturnType {
     return lonter.bat.annotations.rets.ats.Reply.class;
   }
 
-  @Override public void action(final @NotNull BatMessageReceivedEvent e, final @NotNull Object output,
+  @Override public void action(final @NotNull BatMRE e, final @NotNull Object output,
                                final @NotNull Annotation at) {
     if(!(at instanceof lonter.bat.annotations.rets.ats.Reply reply)) {
-      System.err.println("An error occurred in Reply action.");
+      log.error("An error occurred in Reply action.");
       return;
     }
 
@@ -42,9 +46,9 @@ public final class Reply extends ReturnType {
       }
 
       default -> {
-        System.err.println("The output type was not recognized.");
-        System.err.println(output);
-        System.err.println(at);
+        log.error("The output type was not recognized.");
+        log.error("{}", output);
+        log.error("{}", at);
       }
     }
   }

@@ -5,7 +5,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.val;
 
 import lonter.bat.batobjs.BatEmbed;
-import lonter.bat.batobjs.BatMessageReceivedEvent;
+import lonter.bat.batobjs.BatMRE;
 import lonter.bat.annotations.*;
 import lonter.bat.annotations.help.*;
 import lonter.bat.annotations.parameters.*;
@@ -13,6 +13,8 @@ import lonter.bat.annotations.rets.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
  */
 @Component
 public final class CommandHandler {
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   @Value("${app.prefix:#{null}}")
   private String prefix;
 
@@ -67,7 +71,7 @@ public final class CommandHandler {
     }
 
     if(groupId == null) {
-      System.err.println("`groupId` cannot be null: please, set an app.groupId value in your property file.");
+      log.error("`groupId` cannot be null: please, set an app.groupId value in your property file.");
       System.exit(-1);
     }
 
@@ -80,15 +84,16 @@ public final class CommandHandler {
       returnInjections.put(handler.getAnnotationType(), handler);
 
     if(help.size() > 1)
-      System.err.println("Multiple help implementations are not allowed, a random one will be used.");
+      log.error("Multiple help implementations are not allowed, a random one will be used.");
   }
 
   /**
    * Call this function in the MessageReceivedEvent function of your bot.
    * @param e the BatMessageReceivedEvent
    */
-  public void invoke(final @NotNull BatMessageReceivedEvent e) {
-    val input = e.message.text();
+  @SuppressWarnings("unused") // FIXME: Do not push.
+  public void invoke(final @NotNull BatMRE e) {
+    val input = e.message.text;
     val command = input.split(" ")[0];
 
     if(!command.startsWith(prefix))
@@ -121,10 +126,10 @@ public final class CommandHandler {
 
         catch(final @NotNull Exception ex) {
           if(ex instanceof IllegalArgumentException)
-            System.err.println(method.getName() + " has an illegal argument type.");
+            log.error("{} has an illegal argument type.", method.getName());
 
           else
-            ex.printStackTrace();
+            log.error("Unknown error on CommandHandler.invoke()", ex);
         }
 
         return;
@@ -132,7 +137,7 @@ public final class CommandHandler {
     }
   }
 
-  private Object @NotNull[] prepareArguments(final @NotNull BatMessageReceivedEvent e, final @NotNull Method method) {
+  private Object @NotNull[] prepareArguments(final @NotNull BatMRE e, final @NotNull Method method) {
     val parameters = method.getParameters();
     val args = new Object[parameters.length];
 
@@ -152,7 +157,7 @@ public final class CommandHandler {
     return args;
   }
 
-  private void handleReturnValue(final @NotNull BatMessageReceivedEvent e, final @NotNull Method method,
+  private void handleReturnValue(final @NotNull BatMRE e, final @NotNull Method method,
                                  final @Nullable Object output) {
     if(output == null)
       return;
@@ -185,8 +190,8 @@ public final class CommandHandler {
     }
   }
 
-  private void help(final @NotNull BatMessageReceivedEvent e) {
-    val splitted = e.message.text().split(" ");
+  private void help(final @NotNull BatMRE e) {
+    val splitted = e.message.text.split(" ");
 
     val categories = new HashSet<String>();
     val helpAts = new HashMap<ArrayList<String>, Help>();

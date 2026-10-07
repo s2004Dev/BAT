@@ -1,23 +1,22 @@
-package lonter.bat.wrappers.discord;
+package lonter.bat.wrappers.fluxer;
 
 import lombok.AllArgsConstructor;
 import lombok.val;
 
 import lonter.bat.batobjs.Bat;
 import lonter.bat.batobjs.BatUser;
-
-import net.dv8tion.jda.api.JDA;
+import lonter.jfa.api.JFA;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
-public class DiscordBat extends Bat {
-  public final @NotNull JDA jda;
+public class FluxerBat extends Bat {
+  public final @NotNull JFA jfa;
 
   @Override public @Nullable BatUser getUserById(final long id) {
     try {
-      return new DiscordUser(jda.retrieveUserById(id).complete());
+      return new FluxerUser(jfa.retrieveUserById(id).complete());
     }
 
     catch(final @NotNull Exception e) {
@@ -26,11 +25,11 @@ public class DiscordBat extends Bat {
   }
 
   @Override public @Nullable BatUser getUserByTag(final @NotNull String tag) {
-    val user = jda.getUserByTag(tag);
-    return user == null ? null : new DiscordUser(user);
+    val user = jfa.getUserByTag(tag);
+    return user == null ? null : new FluxerUser(user);
   }
 
   @Override public long getPing() {
-    return jda.getGatewayPing();
+    return jfa.getGatewayPing();
   }
 }

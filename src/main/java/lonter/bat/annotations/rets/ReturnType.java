@@ -1,6 +1,6 @@
 package lonter.bat.annotations.rets;
 
-import lonter.bat.batobjs.BatMessageReceivedEvent;
+import lonter.bat.batobjs.BatMRE;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +27,6 @@ public abstract class ReturnType {
    * @param output what the original function returned
    * @param at the annotation itself
    */
-  public abstract void action(final @NotNull BatMessageReceivedEvent e, final @NotNull Object output,
+  public abstract void action(final @NotNull BatMRE e, final @NotNull Object output,
                               final @NotNull Annotation at);
 }

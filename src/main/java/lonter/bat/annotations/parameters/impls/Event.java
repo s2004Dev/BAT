@@ -1,6 +1,6 @@
 package lonter.bat.annotations.parameters.impls;
 
-import lonter.bat.batobjs.BatMessageReceivedEvent;
+import lonter.bat.batobjs.BatMRE;
 import lonter.bat.annotations.parameters.*;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ public final class Event extends CommandArg {
     return lonter.bat.annotations.parameters.ats.Event.class;
   }
 
-  @Override public @NotNull Object value(final @NotNull BatMessageReceivedEvent e, final @NotNull Annotation at) {
+  @Override public @NotNull Object value(final @NotNull BatMRE e, final @NotNull Annotation at) {
     return e;
   }
 }

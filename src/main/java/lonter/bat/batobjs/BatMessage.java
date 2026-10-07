@@ -1,5 +1,13 @@
 package lonter.bat.batobjs;
 
+import lombok.AllArgsConstructor;
+
 import org.jetbrains.annotations.NotNull;
 
-public record BatMessage(@NotNull String text) { }
+@AllArgsConstructor
+public abstract class BatMessage {
+  public @NotNull String text;
+
+  public abstract boolean isSystemPinned();
+  public abstract void delete();
+}

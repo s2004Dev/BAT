@@ -1,12 +1,11 @@
-package lonter.bat.wrappers.discord;
+package lonter.bat.wrappers.fluxer;
 
 import lombok.val;
 
 import lonter.bat.batobjs.BatRole;
 import lonter.bat.batobjs.BatUser;
-
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
+import lonter.jfa.api.entities.Member;
+import lonter.jfa.api.entities.User;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,12 +13,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class DiscordUser extends BatUser {
+public class FluxerUser extends BatUser {
   private final @NotNull User user;
   private final @Nullable Member member;
   private final boolean localPfp;
 
-  public DiscordUser(final @NotNull User user) {
+  public FluxerUser(final @NotNull User user) {
     super(user.getIdLong(), user.getAsTag(), user.getGlobalName(), user.getEffectiveName(), user.getAsMention(),
       user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
 
@@ -28,15 +27,15 @@ public class DiscordUser extends BatUser {
     this.localPfp = false;
   }
 
-  public DiscordUser(final @NotNull Member discordMember) {
-    val user = discordMember.getUser();
+  public FluxerUser(final @NotNull Member member) {
+    val user = member.getUser();
 
-    super(discordMember.getIdLong(), user.getAsTag(), user.getGlobalName(), discordMember.getEffectiveName(),
-      user.getAsMention(), user.getEffectiveAvatarUrl(), discordMember.getEffectiveAvatarUrl());
+    super(member.getIdLong(), user.getAsTag(), user.getGlobalName(), member.getEffectiveName(), user.getAsMention(),
+      user.getEffectiveAvatarUrl(), member.getEffectiveAvatarUrl());
 
     this.user = user;
-    this.member = discordMember;
-    this.localPfp = discordMember.getAvatarId() != null;
+    this.member = member;
+    this.localPfp = member.getAvatarId() != null;
   }
 
   @Override public boolean hasLocalPfp() {
@@ -48,7 +47,7 @@ public class DiscordUser extends BatUser {
   }
 
   @Override public @NotNull ArrayList<BatRole> getRoles() {
-    return getMember().map(m -> new ArrayList<BatRole>(m.getRoles().stream().map(DiscordRole::new).toList()))
+    return getMember().map(m -> new ArrayList<BatRole>(m.getRoles().stream().map(FluxerRole::new).toList()))
       .orElseGet(ArrayList::new);
   }
 

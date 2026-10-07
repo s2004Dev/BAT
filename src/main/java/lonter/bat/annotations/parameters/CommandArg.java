@@ -1,6 +1,6 @@
 package lonter.bat.annotations.parameters;
 
-import lonter.bat.batobjs.BatMessageReceivedEvent;
+import lonter.bat.batobjs.BatMRE;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public abstract class CommandArg {
    * @param at the annotation itself
    * @return the value to inject
    */
-  public abstract @NotNull Object value(final @NotNull BatMessageReceivedEvent e, final @NotNull Annotation at);
+  public abstract @NotNull Object value(final @NotNull BatMRE e, final @NotNull Annotation at);
 
   /**
    * Utility to remove the first element from a string (in this case the command from the args).
