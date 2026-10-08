@@ -89,7 +89,7 @@ public final class CommandHandler {
 
   /**
    * Call this function in the MessageReceivedEvent function of your bot.
-   * @param e the BatMessageReceivedEvent
+   * @param e the BatMRE
    */
   public void invoke(final @NotNull BatMRE e) {
     val input = e.message.text;

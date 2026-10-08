@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE_USE) @AtRet
 public @interface Reply {
     /** This value define weather you want the bot to mention or not the user who sent the message.
-     * <p>By default, it's set on false (no mention).
+     * <p>By default, it's set on true (the bot will mention the user).
      */
-    boolean value() default false;
+    boolean value() default true;
 }

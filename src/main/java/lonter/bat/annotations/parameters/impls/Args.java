@@ -1,5 +1,7 @@
 package lonter.bat.annotations.parameters.impls;
 
+import lombok.val;
+
 import lonter.bat.batobjs.BatMRE;
 import lonter.bat.annotations.parameters.*;
 
@@ -24,7 +26,7 @@ public final class Args extends CommandArg {
       return new String[] { };
     }
 
-    final var input = e.message.text;
+    val input = e.message.text;
     return removeCommand(args.value() ? input : input.toLowerCase().replaceAll("\\s+", " "));
   }
 }

@@ -21,22 +21,23 @@ public class DiscordUser extends BatUser {
 
   public DiscordUser(final @NotNull User user) {
     super(user.getIdLong(), user.getAsTag(), user.getGlobalName(), user.getEffectiveName(), user.getAsMention(),
-      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
+      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl(), user.getTimeCreated().toLocalDateTime());
 
     this.user = user;
     this.member = null;
     this.localPfp = false;
   }
 
-  public DiscordUser(final @NotNull Member discordMember) {
-    val user = discordMember.getUser();
+  public DiscordUser(final @NotNull Member member) {
+    val user = member.getUser();
 
-    super(discordMember.getIdLong(), user.getAsTag(), user.getGlobalName(), discordMember.getEffectiveName(),
-      user.getAsMention(), user.getEffectiveAvatarUrl(), discordMember.getEffectiveAvatarUrl());
+    super(member.getIdLong(), user.getAsTag(), user.getGlobalName(), member.getEffectiveName(),
+      user.getAsMention(), user.getEffectiveAvatarUrl(), member.getEffectiveAvatarUrl(),
+      user.getTimeCreated().toLocalDateTime());
 
     this.user = user;
-    this.member = discordMember;
-    this.localPfp = discordMember.getAvatarId() != null;
+    this.member = member;
+    this.localPfp = member.getAvatarId() != null;
   }
 
   @Override public boolean hasLocalPfp() {

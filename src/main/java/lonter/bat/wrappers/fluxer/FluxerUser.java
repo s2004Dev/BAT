@@ -20,7 +20,7 @@ public class FluxerUser extends BatUser {
 
   public FluxerUser(final @NotNull User user) {
     super(user.getIdLong(), user.getAsTag(), user.getGlobalName(), user.getEffectiveName(), user.getAsMention(),
-      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
+      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl(), user.getTimeCreated().toLocalDateTime());
 
     this.user = user;
     this.member = null;
@@ -30,8 +30,9 @@ public class FluxerUser extends BatUser {
   public FluxerUser(final @NotNull Member member) {
     val user = member.getUser();
 
-    super(member.getIdLong(), user.getAsTag(), user.getGlobalName(), member.getEffectiveName(), user.getAsMention(),
-      user.getEffectiveAvatarUrl(), member.getEffectiveAvatarUrl());
+    super(member.getIdLong(), user.getAsTag(), user.getGlobalName(), member.getEffectiveName(),
+      user.getAsMention(), user.getEffectiveAvatarUrl(), member.getEffectiveAvatarUrl(),
+      user.getTimeCreated().toLocalDateTime());
 
     this.user = user;
     this.member = member;

@@ -1,5 +1,7 @@
 package lonter.bat.annotations;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -15,10 +17,10 @@ public @interface Command {
   /**
    * This parameter is used to give the command a name. Leave it blank to use the method's name instead.
    */
-  String value() default "";
+  @NotNull String value() default "";
 
   /**
    * If a command can be called with different names.
    */
-  String[] aliases() default { };
+  @NotNull String[] aliases() default { };
 }

@@ -3,6 +3,7 @@ package lonter.bat.batobjs;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public abstract class BatUser {
@@ -13,10 +14,11 @@ public abstract class BatUser {
   public final @NotNull String asMention;
   public final @NotNull String globalPfpUrl;
   public final @Nullable String localPfpUrl; // gives globalPfpUrl if not set
+  public final @NotNull LocalDateTime createdAt;
 
   public BatUser(final long id, final @NotNull String handle, final @Nullable String globalName,
                  final @Nullable String localName, final @NotNull String asMention, final @NotNull String globalPfpUrl,
-                 final @Nullable String localPfpUrl) {
+                 final @Nullable String localPfpUrl, final @NotNull LocalDateTime createdAt) {
     this.id = id;
     this.handle = handle;
     this.globalName = globalName == null ? handle : globalName;
@@ -24,6 +26,7 @@ public abstract class BatUser {
     this.asMention = asMention;
     this.globalPfpUrl = globalPfpUrl;
     this.localPfpUrl = localPfpUrl == null ? this.globalPfpUrl : localPfpUrl;
+    this.createdAt = createdAt;
   }
 
   public abstract boolean hasLocalPfp();

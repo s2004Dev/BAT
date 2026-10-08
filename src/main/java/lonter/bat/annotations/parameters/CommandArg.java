@@ -1,5 +1,7 @@
 package lonter.bat.annotations.parameters;
 
+import lombok.val;
+
 import lonter.bat.batobjs.BatMRE;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +38,8 @@ public abstract class CommandArg {
    * @return an array of string containing only the arguments.
    */
   protected static String @NotNull[] removeCommand(final @NotNull String input) {
-    final var array = input.split(" ");
-    final var newArray = new String[array.length-1];
+    val array = input.split(" ");
+    val newArray = new String[array.length-1];
 
     System.arraycopy(array, 1, newArray, 0, newArray.length);
 
