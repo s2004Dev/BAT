@@ -1,44 +1,43 @@
 package lonter.bat.wrappers.fluxer;
 
-import static lonter.bat.wrappers.fluxer.FluxerMRE.getEmbedDS;
+import static lonter.bat.wrappers.fluxer.FluxerMRE.getEmbedFluxer;
 
 import lonter.bat.batobjs.BatChannel;
 import lonter.bat.batobjs.BatEmbed;
-import lonter.jfa.api.entities.channel.concrete.TextChannel;
-import lonter.jfa.api.entities.channel.unions.MessageChannelUnion;
+import lonter.bat.batobjs.BatMessage;
+
+import lonter.jfa.api.entities.channel.middleman.MessageChannel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public class FluxerChannel extends BatChannel {
-  public @Nullable final MessageChannelUnion unionChannel;
-  public @Nullable final TextChannel textChannel;
+  public @NotNull final MessageChannel channel;
 
-  public FluxerChannel(final @NotNull MessageChannelUnion channel) {
+  public FluxerChannel(final @NotNull MessageChannel channel) {
     super(channel.getIdLong(), channel.getName(), channel.getAsMention());
-
-    unionChannel = channel;
-    textChannel = null;
+    this.channel = channel;
   }
 
-  public FluxerChannel(final @NotNull TextChannel channel) {
-    super(channel.getIdLong(), channel.getName(), channel.getAsMention());
-
-    unionChannel = null;
-    textChannel = channel;
+  @Override public void sendMessage(final @NotNull String text, final @Nullable Consumer<BatMessage> success) {
+    channel.sendMessage(text).queue(success == null ? null : i -> success.accept(new FluxerMessage(i)));
   }
 
-  @Override public void sendMessage(final @NotNull String text) {
-    if(unionChannel == null && textChannel == null)
-      throw new IllegalStateException("Both unionChannel and textChannel are null");
-
-    (unionChannel == null ? textChannel : unionChannel).sendMessage(text).queue();
+  @Override public void sendEmbed(final @NotNull BatEmbed embed, final @Nullable Consumer<BatMessage> success) {
+    channel.sendMessageEmbeds(getEmbedFluxer(embed).build())
+      .queue(success == null ? null : i -> success.accept(new FluxerMessage(i)));
   }
 
-  @Override public void sendEmbed(final @NotNull BatEmbed embed) {
-    if(unionChannel == null && textChannel == null)
-      throw new IllegalStateException("Both unionChannel and textChannel are null");
+  @Override public void editMessageById(final long id, final @NotNull String text,
+                                        final @Nullable Consumer<BatMessage> success) {
+    channel.editMessageById(id, text).queue(success == null ? null : i -> success.accept(new FluxerMessage(i)));
+  }
 
-    (unionChannel == null ? textChannel : unionChannel).sendMessageEmbeds(getEmbedDS(embed).build()).queue();
+  @Override public void editMessageEmbedsById(final long id, final @NotNull BatEmbed embed,
+                                              final @Nullable Consumer<BatMessage> success) {
+    channel.editMessageEmbedsById(id, getEmbedFluxer(embed).build())
+      .queue(success == null ? null : i -> success.accept(new FluxerMessage(i)));
   }
 }

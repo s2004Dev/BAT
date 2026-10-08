@@ -1,5 +1,8 @@
 package lonter.bat;
 
+import static java.text.Normalizer.Form.NFD;
+import static java.text.Normalizer.normalize;
+
 import jakarta.annotation.PostConstruct;
 
 import lombok.val;
@@ -10,6 +13,7 @@ import lonter.bat.annotations.*;
 import lonter.bat.annotations.help.*;
 import lonter.bat.annotations.parameters.*;
 import lonter.bat.annotations.rets.*;
+import lonter.bat.annotations.rets.auxiliar.Edited;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,8 +67,7 @@ public final class CommandHandler {
     this.returnHandlers = returnHandlers.orElse(Collections.emptyList());
   }
 
-  @PostConstruct
-  private void init() {
+  @PostConstruct private void init() {
     if(prefix == null) {
       log.error("`prefix` cannot be null: please, set an app.prefix value in your property file.");
       System.exit(-1);
@@ -93,7 +96,7 @@ public final class CommandHandler {
    */
   public void invoke(final @NotNull BatMRE e) {
     val input = e.message.text;
-    val command = input.split(" ")[0];
+    val command = normal(input.split(" ")[0]);
 
     if(!command.startsWith(prefix))
       return;
@@ -115,8 +118,9 @@ public final class CommandHandler {
 
         val commandAt = method.getAnnotation(Command.class);
 
-        if(!command.equalsIgnoreCase(prefix + (commandAt.value().isEmpty() ? method.getName() : commandAt.value())) &&
-          Arrays.stream(commandAt.aliases()).noneMatch(alias -> command.equalsIgnoreCase(prefix + alias)))
+        if(!command.equalsIgnoreCase(prefix + normal(commandAt.value().isEmpty() ? method.getName() :
+           commandAt.value())) && Arrays.stream(commandAt.aliases()).noneMatch(alias ->
+           command.equalsIgnoreCase(prefix + normal(alias))))
           continue;
 
         try {
@@ -173,19 +177,44 @@ public final class CommandHandler {
       }
     }
 
-    if(output instanceof String message)
-      e.sendMessage(message);
+    switch(output) {
+      case String message -> e.sendMessage(message);
 
-    else if(output instanceof BatEmbed embed) {
-      if(embed.color == null && color != null) {
-        try {
-          embed.color = color;
+      case BatEmbed embed -> {
+        if(embed.color == null && color != null) {
+          try {
+            embed.color = color;
+          }
+
+          catch(final @NotNull Exception ignored) { }
         }
 
-        catch(final @NotNull Exception ignored) { }
+        e.sendEmbed(embed);
       }
 
-      e.sendEmbed(embed);
+      case Edited edited -> {
+        val embed = edited.embed;
+
+        if(embed.color == null && color != null) {
+          try {
+            embed.color = color;
+          } catch(final @NotNull Exception ignored) { }
+        }
+
+        val id = edited.id;
+        val action = edited.action;
+
+        if(id != null) {
+          e.channel.editMessageEmbedsById(id, embed, action);
+          e.deleteMessage();
+
+          return;
+        }
+
+        e.sendEmbed(embed, action);
+      }
+
+      default -> log.error("The output type was not recognized: {}", output);
     }
   }
 
@@ -241,17 +270,21 @@ public final class CommandHandler {
     val value = (splitted.length == 1 && categories.size() == 1) ? categories.iterator().next() :
       splitted[1].toLowerCase().trim();
 
-    if(categories.contains(value)) {
+    val valueN = normal(value);
+    val normalized = categories.stream().map(CommandHandler::normal).toList();
+
+    if(normalized.contains(valueN)) {
       val commands = new HashSet<String>();
 
       helpAts.forEach((name, help) -> {
-        if(!helpCategories.get(help).equalsIgnoreCase(value))
+        if(!normal(helpCategories.get(help)).equalsIgnoreCase(valueN))
           return;
 
         commands.add(name.getFirst());
       });
 
-      e.sendEmbed(buildEmbed(commands, toCamelCase(value), "command"));
+      e.sendEmbed(buildEmbed(commands, toCamelCase(categories.stream().toList().get(normalized.indexOf(valueN))),
+        "command"));
 
       return;
     }
@@ -259,7 +292,7 @@ public final class CommandHandler {
     val found = new AtomicBoolean(false);
 
     helpAts.forEach((names, help) -> {
-      if(names.stream().noneMatch(s -> s.equalsIgnoreCase(value)))
+      if(names.stream().noneMatch(s -> normal(s).equalsIgnoreCase(valueN)))
         return;
 
       val subDesc = new StringBuilder();
@@ -303,6 +336,10 @@ public final class CommandHandler {
 
     if(!found.get())
       e.sendMessage("No corresponding commands found.");
+  }
+
+  private static @NotNull String normal(final @NotNull String input) {
+    return normalize(input, NFD).replaceAll("\\p{M}", "");
   }
 
   private static @NotNull String safe(final @NotNull String input) {

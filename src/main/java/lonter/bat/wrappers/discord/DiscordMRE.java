@@ -10,14 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.Color;
 
 public class DiscordMRE extends BatMRE {
-  private final @NotNull MessageReceivedEvent event;
-
   public DiscordMRE(final @NotNull MessageReceivedEvent event) {
     super(new DiscordMessage(event.getMessage()), new DiscordChannel(event.getChannel()),
       new DiscordUser(event.getAuthor()), new DiscordUser(event.getJDA().getSelfUser()),
       event.isFromGuild() ? new DiscordServer(event.getGuild()) : null, new DiscordBat(event.getJDA()), "discord");
-
-    this.event = event;
   }
 
   protected static @NotNull EmbedBuilder getEmbedDS(final @NotNull BatEmbed embed) {
@@ -31,21 +27,5 @@ public class DiscordMRE extends BatMRE {
       if(embed.color != null)
         setColor(Color.decode(embed.color));
     }};
-  }
-
-  @Override public void sendMessage(final @NotNull String text) {
-    event.getChannel().sendMessage(text).queue();
-  }
-
-  @Override public void reply(final @NotNull String text, final boolean ping) {
-    event.getMessage().reply(text).mentionRepliedUser(ping).queue();
-  }
-
-  @Override public void sendEmbed(final @NotNull BatEmbed embed) {
-    event.getChannel().sendMessageEmbeds(getEmbedDS(embed).build()).queue();
-  }
-
-  @Override public void replyEmbed(final @NotNull BatEmbed embed, final boolean ping) {
-    event.getMessage().replyEmbeds(getEmbedDS(embed).build()).mentionRepliedUser(ping).queue();
   }
 }
