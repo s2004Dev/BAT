@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 @AllArgsConstructor
 public abstract class BatMessage {
+  public long id;
   public @NotNull String text;
 
   public abstract boolean isSystemPinned();

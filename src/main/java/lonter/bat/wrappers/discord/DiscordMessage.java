@@ -17,7 +17,7 @@ public class DiscordMessage extends BatMessage {
   private final @NotNull Message message;
 
   public DiscordMessage(final @NotNull Message message) {
-    super(message.getContentRaw());
+    super(message.getIdLong(), message.getContentRaw());
     this.message = message;
   }
 
