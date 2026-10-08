@@ -18,6 +18,9 @@ public abstract class SharedResources {
   @Value("${app.prefix}")
   public String prefix;
 
+  @Value("${app.embedColor}")
+  public String color;
+
   private final HashMap<String, BatServer> servers = new HashMap<>();
   private final HashMap<String, BatShard> shards = new HashMap<>();
 
