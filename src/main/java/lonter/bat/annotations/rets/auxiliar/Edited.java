@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-@AllArgsConstructor // FIXME
+@AllArgsConstructor
 public final class Edited {
   public final @Nullable Long id;
   public final @NotNull BatEmbed embed;

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * BatRoleCEvent (I really don't remember why I called it like this)
+ * BatRoleChangeEvent
  */
 @AllArgsConstructor
 public abstract class BatRCE {

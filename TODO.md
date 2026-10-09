@@ -1,9 +1,8 @@
-1. FIX: Methods declared private or protected;
+1. Handle the fact that categories might have spaces;
 2. Complete and fix the `README.md` file;
 3. Better return type handling;
-4. Slash commands;
-5. Callable subcommands;
-6. Handle the fact that categories might have spaces;
-7. Fix `Edited` return type;
-8. Debug mode;
-9. Impersonation mode.
+4. Fix `Edited` return type;
+5. Slash commands;
+6. Callable subcommands;
+7. Debug mode;
+8. Impersonation mode.

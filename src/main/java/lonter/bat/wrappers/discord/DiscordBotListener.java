@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @Component @AllArgsConstructor
 public final class DiscordBotListener extends ListenerAdapter {
-  private static final String source = "discord";
+  private static final String SOURCE = "discord";
 
   private final List<BatListener> listener;
 
@@ -29,7 +30,7 @@ public final class DiscordBotListener extends ListenerAdapter {
   }
 
   @Override public void onGuildReady(final @NotNull GuildReadyEvent __) {
-    listener.forEach(i -> i.onGuildReady(source));
+    listener.forEach(i -> i.onServerReady(SOURCE));
   }
 
   @Override public void onMessageReactionAdd(final @NotNull MessageReactionAddEvent e) {
@@ -44,11 +45,15 @@ public final class DiscordBotListener extends ListenerAdapter {
     listener.forEach(i -> i.onMemberJoinLeave(new DiscordGGE(e)));
   }
 
-  @Override public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent e) {
+  @Override public void onGuildMemberRemove(final @NotNull GuildMemberRemoveEvent e) {
     listener.forEach(i -> i.onMemberJoinLeave(new DiscordGGE(e)));
   }
 
-  @Override public void onGuildMemberRoleAdd(@NotNull GuildMemberRoleAddEvent e) {
-    listener.forEach(i -> i.onGuildMemberRoleAdd(new DiscordRCE(e)));
+  @Override public void onGuildMemberRoleAdd(final @NotNull GuildMemberRoleAddEvent e) {
+    listener.forEach(i -> i.onServerMemberRoleChange(new DiscordRCE(e)));
+  }
+
+  @Override public void onGuildMemberRoleRemove(final @NotNull GuildMemberRoleRemoveEvent e) {
+    listener.forEach(i -> i.onServerMemberRoleChange(new DiscordRCE(e)));
   }
 }

@@ -7,6 +7,7 @@ import lonter.jfa.api.events.guild.GuildReadyEvent;
 import lonter.jfa.api.events.guild.member.GuildMemberJoinEvent;
 import lonter.jfa.api.events.guild.member.GuildMemberRemoveEvent;
 import lonter.jfa.api.events.guild.member.GuildMemberRoleAddEvent;
+import lonter.jfa.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import lonter.jfa.api.events.message.MessageReceivedEvent;
 import lonter.jfa.api.events.message.react.MessageReactionAddEvent;
 import lonter.jfa.api.events.message.react.MessageReactionRemoveEvent;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Component @AllArgsConstructor
 public final class FluxerBotListener extends ListenerAdapter {
-  private static final String source = "fluxer";
+  private static final String SOURCE = "fluxer";
 
   private final List<BatListener> listener;
 
@@ -28,7 +29,7 @@ public final class FluxerBotListener extends ListenerAdapter {
   }
 
   @Override public void onGuildReady(final @NotNull GuildReadyEvent __) {
-    listener.forEach(i -> i.onGuildReady(source));
+    listener.forEach(i -> i.onServerReady(SOURCE));
   }
 
   @Override public void onMessageReactionAdd(final @NotNull MessageReactionAddEvent e) {
@@ -43,11 +44,15 @@ public final class FluxerBotListener extends ListenerAdapter {
     listener.forEach(i -> i.onMemberJoinLeave(new FluxerGGE(e)));
   }
 
-  @Override public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent e) {
+  @Override public void onGuildMemberRemove(final @NotNull GuildMemberRemoveEvent e) {
     listener.forEach(i -> i.onMemberJoinLeave(new FluxerGGE(e)));
   }
 
-  @Override public void onGuildMemberRoleAdd(@NotNull GuildMemberRoleAddEvent e) {
-    listener.forEach(i -> i.onGuildMemberRoleAdd(new FluxerRCE(e)));
+  @Override public void onGuildMemberRoleAdd(final @NotNull GuildMemberRoleAddEvent e) {
+    listener.forEach(i -> i.onServerMemberRoleChange(new FluxerRCE(e)));
+  }
+
+  @Override public void onGuildMemberRoleRemove(final @NotNull GuildMemberRoleRemoveEvent e) {
+    listener.forEach(i -> i.onServerMemberRoleChange(new FluxerRCE(e)));
   }
 }
