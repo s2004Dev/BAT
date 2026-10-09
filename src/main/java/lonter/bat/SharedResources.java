@@ -7,6 +7,8 @@ import lonter.bat.batobjs.BatServer;
 import lonter.bat.batobjs.BatShard;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 
@@ -21,6 +23,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class SharedResources {
   private static final int MSG_LENGTH = 1_000;
 
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   @Value("${app.prefix}")
   public String prefix;
 
@@ -32,7 +36,7 @@ public abstract class SharedResources {
 
   private final ConcurrentHashMap<String, BatShard> shards = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, BatServer> servers = new ConcurrentHashMap<>();
-  private final Set<String> initializedSources = ConcurrentHashMap.newKeySet();
+  private final Set<String> sources = ConcurrentHashMap.newKeySet();
 
   private CopyOnWriteArrayList<BatChannel> broadcast = new CopyOnWriteArrayList<>();
 
@@ -66,11 +70,22 @@ public abstract class SharedResources {
   }
 
   public void initServer(final @NotNull String source) {
-    initializedSources.add(source);
+    sources.add(source);
+  }
+
+  public void serverReady(final @NotNull String source) {
+    val server = getShard(source).getServerById(Long.parseLong(getValue(source, "mainServer")));
+
+    if(server == null) {
+      log.error("{} main server is null.", source);
+      System.exit(-1);
+    }
+
+    setServer(source, server);
   }
 
   public void setServer(final @NotNull String source, final @NotNull BatServer server) {
-    if(!initializedSources.contains(source))
+    if(!sources.contains(source))
       throw new IllegalStateException("`" + source + "` was not initialized: use initServer() first.");
 
     servers.put(source, server);
@@ -89,8 +104,12 @@ public abstract class SharedResources {
     return servers.get(source) != null;
   }
 
+  public boolean isAwaiting(final @NotNull String source) {
+    return sources.contains(source) && !getReady(source);
+  }
+
   public boolean allReady() {
-    return !initializedSources.isEmpty() && initializedSources.stream().allMatch(servers::containsKey);
+    return !sources.isEmpty() && sources.stream().allMatch(servers::containsKey);
   }
 
   protected void initBroadcast() {
