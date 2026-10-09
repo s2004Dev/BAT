@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+/**
+ * BatRoleCEvent (I really don't remember why I called it like this)
+ */
 @AllArgsConstructor
 public abstract class BatRCE {
   public final @NotNull BatUser author;

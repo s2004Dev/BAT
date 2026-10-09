@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BatGenericGuildEvent
+ */
 @AllArgsConstructor
 public abstract class BatGGE {
   public final @NotNull BatUser author;

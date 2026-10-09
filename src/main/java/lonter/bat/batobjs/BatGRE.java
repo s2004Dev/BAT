@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BatGenericReactionEvent
+ */
 @AllArgsConstructor
 public abstract class BatGRE {
   public final long messageId;

@@ -9,6 +9,11 @@ This library uses `JDA` (Java Discord Adaptation).
 
 ** **
 
+With the **BAT** framework you can **bet** your **bot** will run everywhere in just a **bit**...
+**but** it's still a work in progress.
+
+** **
+
 ## Getting started
 
 ### Dependencies

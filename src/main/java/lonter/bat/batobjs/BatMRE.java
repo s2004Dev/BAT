@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+/**
+ * BatMessageReceivedEvent
+ */
 @AllArgsConstructor
 public abstract class BatMRE {
   public final @NotNull BatMessage message;

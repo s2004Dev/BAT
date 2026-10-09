@@ -4,4 +4,6 @@
 4. Slash commands;
 5. Callable subcommands;
 6. Handle the fact that categories might have spaces;
-7. Fix `Edited` return type.
+7. Fix `Edited` return type;
+8. Debug mode;
+9. Impersonation mode.
