@@ -7,7 +7,10 @@ import ch.qos.logback.core.AppenderBase;
 
 import lombok.val;
 
+import lonter.bat.batobjs.BatMRE;
+
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -102,5 +105,26 @@ public final class BatLogger extends AppenderBase<ILoggingEvent> {
 
       default -> GRAY;
     };
+  }
+
+  public static void logMreError(final @NotNull String source, final @NotNull Logger log,
+                                 final @NotNull BatMRE e, final @NotNull Exception ex) {
+    val ret = new StringBuilder();
+
+    ret.append("onMessageReceived(): BatMRE ").append(source).append(" threw an exception: ").append("\n")
+       .append("Author: ").append(e.author.globalName).append("\n")
+       .append("Message: ").append(e.message.text);
+
+    if(e.server == null) {
+      log.error(ret.toString(), ex);
+      return;
+    }
+
+    val channel = e.channel;
+
+    ret.append("\nChannel: ").append(channel.name).append("; id: ").append(channel.id).append("\n")
+       .append("Guild: ").append(e.server.name).append("\n");
+
+    log.error(ret.toString(), ex);
   }
 }

@@ -15,15 +15,14 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class DiscordUser extends BatUser {
-  private final @NotNull User user;
   private final @Nullable Member member;
   private final boolean localPfp;
 
   public DiscordUser(final @NotNull User user) {
     super(user.getIdLong(), user.getAsTag(), user.getGlobalName(), user.getEffectiveName(), user.getAsMention(),
-      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl(), user.getTimeCreated().toLocalDateTime());
+      user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl(), user.getTimeCreated().toLocalDateTime(),
+      user.isBot());
 
-    this.user = user;
     this.member = null;
     this.localPfp = false;
   }
@@ -33,9 +32,8 @@ public class DiscordUser extends BatUser {
 
     super(member.getIdLong(), user.getAsTag(), user.getGlobalName(), member.getEffectiveName(),
       user.getAsMention(), user.getEffectiveAvatarUrl(), member.getEffectiveAvatarUrl(),
-      user.getTimeCreated().toLocalDateTime());
+      user.getTimeCreated().toLocalDateTime(), user.isBot());
 
-    this.user = user;
     this.member = member;
     this.localPfp = member.getAvatarId() != null;
   }
@@ -51,9 +49,5 @@ public class DiscordUser extends BatUser {
   @Override public @NotNull ArrayList<BatRole> getRoles() {
     return getMember().map(m -> new ArrayList<BatRole>(m.getRoles().stream().map(DiscordRole::new).toList()))
       .orElseGet(ArrayList::new);
-  }
-
-  @Override public boolean isBot() {
-    return user.isBot();
   }
 }

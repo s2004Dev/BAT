@@ -15,10 +15,11 @@ public abstract class BatUser {
   public final @NotNull String globalPfpUrl;
   public final @Nullable String localPfpUrl; // gives globalPfpUrl if not set
   public final @NotNull LocalDateTime createdAt;
+  public final boolean isBot;
 
   public BatUser(final long id, final @NotNull String handle, final @Nullable String globalName,
                  final @Nullable String localName, final @NotNull String asMention, final @NotNull String globalPfpUrl,
-                 final @Nullable String localPfpUrl, final @NotNull LocalDateTime createdAt) {
+                 final @Nullable String localPfpUrl, final @NotNull LocalDateTime createdAt, final boolean isBot) {
     this.id = id;
     this.handle = handle;
     this.globalName = globalName == null ? handle : globalName;
@@ -27,6 +28,7 @@ public abstract class BatUser {
     this.globalPfpUrl = globalPfpUrl;
     this.localPfpUrl = localPfpUrl == null ? this.globalPfpUrl : localPfpUrl;
     this.createdAt = createdAt;
+    this.isBot = isBot;
   }
 
   public abstract boolean hasLocalPfp();
@@ -39,6 +41,4 @@ public abstract class BatUser {
   public boolean hasRole(final @NotNull BatRole role) {
     return hasRole(role.id);
   }
-
-  public abstract boolean isBot();
 }

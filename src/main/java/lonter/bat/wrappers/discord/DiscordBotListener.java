@@ -2,6 +2,10 @@ package lonter.bat.wrappers.discord;
 
 import lombok.AllArgsConstructor;
 
+import lombok.val;
+
+import lonter.bat.BatLogger;
+import lonter.bat.CommandHandler;
 import lonter.bat.SharedResources;
 import lonter.bat.batobjs.BatListener;
 
@@ -16,17 +20,31 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component @AllArgsConstructor
 public final class DiscordBotListener extends ListenerAdapter {
   private static final String SOURCE = "discord";
 
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
+  private final CommandHandler handler;
   private final SharedResources shared;
   private final BatListener listener;
 
   @Override public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
-    listener.onMessageReceived(new DiscordMRE(e));
+    val mre = new DiscordMRE(e);
+
+    try {
+      handler.invoke(mre);
+      listener.onMessageReceived(mre);
+    }
+
+    catch(final @NotNull Exception ex) {
+      BatLogger.logMreError(SOURCE, log, mre, ex);
+    }
   }
 
   @Override public void onGuildReady(final @NotNull GuildReadyEvent __) {
