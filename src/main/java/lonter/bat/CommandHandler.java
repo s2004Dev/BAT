@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.val;
 
 import lonter.bat.batobjs.BatEmbed;
+import lonter.bat.batobjs.BatException;
 import lonter.bat.batobjs.BatMRE;
 import lonter.bat.annotations.*;
 import lonter.bat.annotations.help.*;
@@ -124,11 +125,12 @@ public final class CommandHandler {
         }
 
         catch(final @NotNull Exception ex) {
-          if(ex instanceof IllegalArgumentException)
-            log.error("{} has an illegal argument type.", method.getName());
+          switch(ex) {
+            case BatException _ -> e.sendMessage(ex.getMessage());
+            case IllegalAccessException _ -> log.error("{} has an illegal argument type.", method.getName());
 
-          else
-            log.error("Unknown error on CommandHandler.invoke()", ex);
+            default -> log.error("Unknown error on CommandHandler.invoke()", ex);
+          }
         }
 
         return;
