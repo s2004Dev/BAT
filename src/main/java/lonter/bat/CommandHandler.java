@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -125,9 +126,19 @@ public final class CommandHandler {
         }
 
         catch(final @NotNull Exception ex) {
+          val methodName = method.getName();
+
           switch(ex) {
-            case BatException _ -> e.sendMessage(ex.getMessage());
-            case IllegalAccessException _ -> log.error("{} has an illegal argument type.", method.getName());
+            case InvocationTargetException _ -> {
+              if(ex.getCause() instanceof BatException be) {
+                e.sendMessage(be.getMessage());
+                return;
+              }
+
+              log.error("Error on CommandHandler.invoke() - `{}` has thrown an exception:", methodName, ex);
+            }
+
+            case IllegalAccessException _ -> log.error("{} has an illegal argument type.", methodName);
 
             default -> log.error("Unknown error on CommandHandler.invoke()", ex);
           }
