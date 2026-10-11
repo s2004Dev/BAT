@@ -13,7 +13,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 
 @ImplParam
-public class Options extends CommandArg {
+public final class Options extends CommandArg {
   @Override public @NotNull Class<? extends Annotation> getAnnotationType() {
     return lonter.bat.annotations.parameters.ats.Options.class;
   }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class FluxerMessage extends BatMessage {
+public final class FluxerMessage extends BatMessage {
   private final @NotNull Message message;
 
   public FluxerMessage(final @NotNull Message message) {

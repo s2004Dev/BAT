@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class DiscordChannel extends BatChannel {
+public final class DiscordChannel extends BatChannel {
   public @NotNull final MessageChannel channel;
 
   public DiscordChannel(final @NotNull MessageChannel channel) {

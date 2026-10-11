@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class FluxerUser extends BatUser {
+public final class FluxerUser extends BatUser {
   private final @Nullable Member member;
   private final boolean localPfp;
 

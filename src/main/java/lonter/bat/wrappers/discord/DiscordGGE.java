@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DiscordGGE extends BatGGE {
+public final class DiscordGGE extends BatGGE {
   public DiscordGGE(final @NotNull GuildMemberJoinEvent e) {
     super(new DiscordUser(e.getMember()), "discord", "join");
   }

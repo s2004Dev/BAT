@@ -8,7 +8,7 @@ import lonter.jfa.api.events.message.react.MessageReactionAddEvent;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FluxerGRE extends BatGRE {
+public final class FluxerGRE extends BatGRE {
   public FluxerGRE(final @NotNull GenericMessageReactionEvent e) {
     val emoji = e.getReaction().getEmoji();
     String id;

@@ -90,10 +90,6 @@ public final class CommandHandler {
       log.error("Multiple help implementations are not allowed, a random one will be used.");
   }
 
-  /**
-   * Call this function in the MessageReceivedEvent function of your bot.
-   * @param e the BatMRE
-   */
   public void invoke(final @NotNull BatMRE e) {
     val input = e.message.text;
     val command = normal(input.split(" ")[0]);

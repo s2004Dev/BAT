@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 
-public class FluxerMRE extends BatMRE {
+public final class FluxerMRE extends BatMRE {
   public FluxerMRE(final @NotNull MessageReceivedEvent event) {
     super(new FluxerMessage(event.getMessage()), new FluxerChannel(event.getChannel()),
       new FluxerUser(event.getAuthor()), new FluxerUser(event.getJFA().getSelfUser()),

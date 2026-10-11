@@ -8,7 +8,7 @@ import lonter.jfa.api.events.guild.member.GuildMemberRemoveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FluxerGGE extends BatGGE {
+public final class FluxerGGE extends BatGGE {
   public FluxerGGE(final @NotNull GuildMemberJoinEvent e) {
     super(new FluxerUser(e.getMember()), "fluxer", "join");
   }

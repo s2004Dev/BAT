@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class DiscordUser extends BatUser {
+public final class DiscordUser extends BatUser {
   private final @Nullable Member member;
   private final boolean localPfp;
 

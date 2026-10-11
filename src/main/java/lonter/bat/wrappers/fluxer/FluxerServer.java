@@ -13,7 +13,7 @@ import lonter.jfa.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FluxerServer extends BatServer {
+public final class FluxerServer extends BatServer {
   public final @NotNull Guild guild;
 
   public FluxerServer(final @NotNull Guild guild) {

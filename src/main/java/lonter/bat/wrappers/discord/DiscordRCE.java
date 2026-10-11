@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class DiscordRCE extends BatRCE {
+public final class DiscordRCE extends BatRCE {
   public DiscordRCE(final @NotNull GuildMemberRoleAddEvent e) {
     super(new DiscordUser(e.getUser()), new ArrayList<>(e.getRoles().stream().map(DiscordRole::new).toList()),
       "discord", "add");

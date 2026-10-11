@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DiscordServer extends BatServer {
+public final class DiscordServer extends BatServer {
   public final @NotNull Guild guild;
 
   public DiscordServer(final @NotNull Guild guild) {

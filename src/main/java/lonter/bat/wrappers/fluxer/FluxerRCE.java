@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class FluxerRCE extends BatRCE {
+public final class FluxerRCE extends BatRCE {
   public FluxerRCE(final @NotNull GuildMemberRoleAddEvent e) {
     super(new FluxerUser(e.getUser()), new ArrayList<>(e.getRoles().stream().map(FluxerRole::new).toList()),
       "fluxer", "add");

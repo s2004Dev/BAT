@@ -5,7 +5,7 @@ import lonter.jfa.api.entities.Role;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FluxerRole extends BatRole {
+public final class FluxerRole extends BatRole {
   public FluxerRole(final @NotNull Role role) {
     super(role.getIdLong());
   }

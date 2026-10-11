@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class FluxerChannel extends BatChannel {
+public final class FluxerChannel extends BatChannel {
   public @NotNull final MessageChannel channel;
 
   public FluxerChannel(final @NotNull MessageChannel channel) {

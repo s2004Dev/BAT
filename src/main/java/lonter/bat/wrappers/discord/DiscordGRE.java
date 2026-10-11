@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DiscordGRE extends BatGRE {
+public final class DiscordGRE extends BatGRE {
   public DiscordGRE(final @NotNull GenericMessageReactionEvent e) {
     val emoji = e.getReaction().getEmoji();
     String id;

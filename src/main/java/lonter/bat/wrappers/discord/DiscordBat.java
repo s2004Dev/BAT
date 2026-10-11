@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
-public class DiscordBat extends Bat {
+public final class DiscordBat extends Bat {
   public final @NotNull JDA jda;
 
   @Override public @Nullable BatUser getUserById(final long id) {

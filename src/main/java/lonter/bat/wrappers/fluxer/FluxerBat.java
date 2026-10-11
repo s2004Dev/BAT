@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
-public class FluxerBat extends Bat {
+public final class FluxerBat extends Bat {
   public final @NotNull JFA jfa;
 
   @Override public @Nullable BatUser getUserById(final long id) {

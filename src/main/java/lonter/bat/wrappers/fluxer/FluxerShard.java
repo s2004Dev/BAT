@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
-public class FluxerShard extends BatShard {
+public final class FluxerShard extends BatShard {
   public final @NotNull ShardManager shard;
 
   @Override public @Nullable BatServer getServerById(final long id) {

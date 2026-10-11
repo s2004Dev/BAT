@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class DiscordMessage extends BatMessage {
+public final class DiscordMessage extends BatMessage {
   private final @NotNull Message message;
 
   public DiscordMessage(final @NotNull Message message) {
