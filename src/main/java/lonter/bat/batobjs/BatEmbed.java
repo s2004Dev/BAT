@@ -14,19 +14,19 @@ public class BatEmbed {
   public @Nullable String imageUrl;
   public @Nullable String thumbnailUrl;
 
-  public BatEmbed(final @NotNull String title, final @NotNull String description, final @NotNull String footer,
-                  final @NotNull String color) {
+  public BatEmbed(final @Nullable String title, final @Nullable String description, final @Nullable String footer,
+                  final @Nullable String color) {
     this.title = title;
 
     try {
       this.color = color;
-    } catch (final @NotNull Exception _) { }
+    } catch(final @NotNull Exception _) { }
 
     this.description = description;
     this.footer = footer;
   }
 
-  public BatEmbed(final @NotNull String title, final @NotNull String description, final @NotNull String color) {
-    this(title, description, "", color);
+  public BatEmbed(final @Nullable String title, final @Nullable String description, final @Nullable String color) {
+    this(title, description, null, color);
   }
 }

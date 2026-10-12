@@ -5,6 +5,7 @@ import lonter.jfa.api.EmbedBuilder;
 import lonter.jfa.api.events.message.MessageReceivedEvent;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.Optional;
@@ -19,14 +20,18 @@ public final class FluxerMRE extends BatMRE {
 
   public static @NotNull EmbedBuilder getEmbedFluxer(final @NotNull BatEmbed embed) {
     return new EmbedBuilder() {{
-      setTitle(embed.title);
-      setDescription(embed.description);
-      setFooter(embed.footer);
-      setImage(embed.imageUrl);
-      setThumbnail(embed.thumbnailUrl);
+      setTitle(checkField(embed.title));
+      setDescription(checkField(embed.description));
+      setFooter(checkField(embed.footer));
+      setImage(checkField(embed.imageUrl));
+      setThumbnail(checkField(embed.thumbnailUrl));
 
-      if(embed.color != null)
+      if(embed.color != null && !embed.color.isBlank())
         setColor(Color.decode(embed.color));
     }};
+  }
+
+  private static @Nullable String checkField(final @Nullable String field) {
+    return field != null && !field.isBlank() ? field : null;
   }
 }
