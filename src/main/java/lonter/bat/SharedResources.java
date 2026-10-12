@@ -7,6 +7,7 @@ import lonter.bat.batobjs.BatServer;
 import lonter.bat.batobjs.BatShard;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +27,10 @@ public abstract class SharedResources {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   @Value("${app.prefix}")
-  public String prefix;
+  public @NotNull String prefix;
 
-  @Value("${app.embedColor}")
-  public String color;
+  @Value("${app.embedColor#{null}}")
+  public @Nullable String color;
 
   @Value("${app.logger:#{false}}")
   public boolean logger;
