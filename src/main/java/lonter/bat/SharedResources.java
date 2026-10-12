@@ -29,7 +29,7 @@ public abstract class SharedResources {
   @Value("${app.prefix}")
   public @NotNull String prefix;
 
-  @Value("${app.embedColor#{null}}")
+  @Value("${app.embedColor:#{null}}")
   public @Nullable String color;
 
   @Value("${app.logger:#{false}}")
