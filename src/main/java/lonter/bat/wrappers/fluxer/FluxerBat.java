@@ -8,25 +8,26 @@ import lonter.bat.batobjs.BatUser;
 import lonter.jfa.api.JFA;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 public final class FluxerBat extends Bat {
   public final @NotNull JFA jfa;
 
-  @Override public @Nullable BatUser getUserById(final long id) {
+  @Override public @NotNull Optional<BatUser> getUserById(final long id) {
     try {
-      return new FluxerUser(jfa.retrieveUserById(id).complete());
+      return Optional.of(new FluxerUser(jfa.retrieveUserById(id).complete()));
     }
 
     catch(final @NotNull Exception e) {
-      return null;
+      return Optional.empty();
     }
   }
 
-  @Override public @Nullable BatUser getUserByTag(final @NotNull String tag) {
+  @Override public @NotNull Optional<BatUser> getUserByTag(final @NotNull String tag) {
     val user = jfa.getUserByTag(tag);
-    return user == null ? null : new FluxerUser(user);
+    return Optional.ofNullable(user == null ? null : new FluxerUser(user));
   }
 
   @Override public long getPing() {

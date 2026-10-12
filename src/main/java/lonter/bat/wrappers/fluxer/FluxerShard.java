@@ -8,14 +8,15 @@ import lonter.bat.batobjs.BatShard;
 import lonter.jfa.api.sharding.ShardManager;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 public final class FluxerShard extends BatShard {
   public final @NotNull ShardManager shard;
 
-  @Override public @Nullable BatServer getServerById(final long id) {
+  @Override public @NotNull Optional<BatServer> getServerById(final long id) {
     val guild = shard.getGuildById(id);
-    return guild == null ? null : new FluxerServer(guild);
+    return Optional.ofNullable(guild == null ? null : new FluxerServer(guild));
   }
 }

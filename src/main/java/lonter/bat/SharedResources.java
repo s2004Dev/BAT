@@ -76,12 +76,12 @@ public abstract class SharedResources {
   public void serverReady(final @NotNull String source) {
     val server = getShard(source).getServerById(Long.parseLong(getValue(source, "mainServer")));
 
-    if(server == null) {
+    if(server.isEmpty()) {
       log.error("{} main server is null.", source);
       System.exit(-1);
     }
 
-    setServer(source, server);
+    setServer(source, server.get());
   }
 
   public void setServer(final @NotNull String source, final @NotNull BatServer server) {
@@ -118,13 +118,10 @@ public abstract class SharedResources {
 
     broadcast = new CopyOnWriteArrayList<>(servers.entrySet().stream().map(i -> {
       val source = i.getKey();
-      val logger = i.getValue().getChannelById(Long.parseLong(getValue(source, "logger")));
 
-      if(logger == null)
-        throw new IllegalStateException("Logger channel for " + source + " not found; it must be in the " +
-          "initialized server.");
-
-      return logger;
+      return i.getValue().getChannelById(Long.parseLong(getValue(source, "logger"))).orElseThrow(( ) ->
+        new IllegalStateException("Logger channel for " + source + " not found; it must be in the initialized " +
+          "server."));
     }).toList());
   }
 

@@ -13,7 +13,7 @@ public abstract class BatUser {
   public final @NotNull String localName; // gives globalName if not set
   public final @NotNull String asMention;
   public final @NotNull String globalPfpUrl;
-  public final @Nullable String localPfpUrl; // gives globalPfpUrl if not set
+  public final @NotNull String localPfpUrl; // gives globalPfpUrl if not set
   public final @NotNull LocalDateTime createdAt;
   public final boolean isBot;
 

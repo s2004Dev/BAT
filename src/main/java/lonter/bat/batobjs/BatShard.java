@@ -1,7 +1,9 @@
 package lonter.bat.batobjs;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public abstract class BatShard {
-  public abstract @Nullable BatServer getServerById(final long id);
+  public abstract @NotNull Optional<BatServer> getServerById(final long id);
 }

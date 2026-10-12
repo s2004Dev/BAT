@@ -115,16 +115,13 @@ public final class BatLogger extends AppenderBase<ILoggingEvent> {
        .append("Author: ").append(e.author.globalName).append("\n")
        .append("Message: ").append(e.message.text);
 
-    if(e.server == null) {
+    e.server.ifPresentOrElse(server -> {
+      val channel = e.channel;
+
+      ret.append("\nChannel: ").append(channel.name).append("; id: ").append(channel.id).append("\n")
+         .append("Guild: ").append(server.name).append("\n");
+
       log.error(ret.toString(), ex);
-      return;
-    }
-
-    val channel = e.channel;
-
-    ret.append("\nChannel: ").append(channel.name).append("; id: ").append(channel.id).append("\n")
-       .append("Guild: ").append(e.server.name).append("\n");
-
-    log.error(ret.toString(), ex);
+    }, ( ) -> log.error(ret.toString(), ex));
   }
 }

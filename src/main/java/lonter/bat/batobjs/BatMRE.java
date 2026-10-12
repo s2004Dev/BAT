@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -16,7 +17,7 @@ public abstract class BatMRE {
   public final @NotNull BatChannel channel;
   public final @NotNull BatUser author;
   public final @NotNull BatUser self;
-  public final @Nullable BatServer server;
+  public final @NotNull Optional<BatServer> server;
   public final @NotNull Bat bat;
   public final @NotNull String source;
 

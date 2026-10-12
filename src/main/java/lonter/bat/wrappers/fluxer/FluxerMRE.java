@@ -7,15 +7,17 @@ import lonter.jfa.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
+import java.util.Optional;
 
 public final class FluxerMRE extends BatMRE {
   public FluxerMRE(final @NotNull MessageReceivedEvent event) {
     super(new FluxerMessage(event.getMessage()), new FluxerChannel(event.getChannel()),
       new FluxerUser(event.getAuthor()), new FluxerUser(event.getJFA().getSelfUser()),
-      event.isFromGuild() ? new FluxerServer(event.getGuild()) : null, new FluxerBat(event.getJFA()), "fluxer");
+      Optional.ofNullable(event.isFromGuild() ? new FluxerServer(event.getGuild()) : null),
+      new FluxerBat(event.getJFA()), "fluxer");
   }
 
-  protected static @NotNull EmbedBuilder getEmbedFluxer(final @NotNull BatEmbed embed) {
+  public static @NotNull EmbedBuilder getEmbedFluxer(final @NotNull BatEmbed embed) {
     return new EmbedBuilder() {{
       setTitle(embed.title);
       setDescription(embed.description);

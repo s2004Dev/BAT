@@ -8,15 +8,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
+import java.util.Optional;
 
 public final class DiscordMRE extends BatMRE {
   public DiscordMRE(final @NotNull MessageReceivedEvent event) {
     super(new DiscordMessage(event.getMessage()), new DiscordChannel(event.getChannel()),
       new DiscordUser(event.getAuthor()), new DiscordUser(event.getJDA().getSelfUser()),
-      event.isFromGuild() ? new DiscordServer(event.getGuild()) : null, new DiscordBat(event.getJDA()), "discord");
+      Optional.ofNullable(event.isFromGuild() ? new DiscordServer(event.getGuild()) : null),
+      new DiscordBat(event.getJDA()), "discord");
   }
 
-  protected static @NotNull EmbedBuilder getEmbedDS(final @NotNull BatEmbed embed) {
+  public static @NotNull EmbedBuilder getEmbedDS(final @NotNull BatEmbed embed) {
     return new EmbedBuilder() {{
       setTitle(embed.title);
       setDescription(embed.description);

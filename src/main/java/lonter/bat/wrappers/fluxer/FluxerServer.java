@@ -11,7 +11,8 @@ import lonter.jfa.api.entities.Member;
 import lonter.jfa.api.entities.Role;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public final class FluxerServer extends BatServer {
   public final @NotNull Guild guild;
@@ -21,19 +22,19 @@ public final class FluxerServer extends BatServer {
     this.guild = guild;
   }
 
-  @Override public @Nullable BatUser getMemberById(final long id) {
+  @Override public @NotNull Optional<BatUser> getMemberById(final long id) {
     val member = guild.getMemberById(id);
-    return member == null ? null : new FluxerUser(member);
+    return Optional.ofNullable(member == null ? null : new FluxerUser(member));
   }
 
-  @Override public @Nullable BatChannel getChannelById(final long id) {
+  @Override public @NotNull Optional<BatChannel> getChannelById(final long id) {
     val channel = guild.getTextChannelById(id);
-    return channel == null ? null : new FluxerChannel(channel);
+    return Optional.ofNullable(channel == null ? null : new FluxerChannel(channel));
   }
 
-  @Override public @Nullable BatRole getRoleById(final long id) {
+  @Override public @NotNull Optional<BatRole> getRoleById(final long id) {
     val role = guild.getRoleById(id);
-    return role == null ? null : new FluxerRole(role);
+    return Optional.ofNullable(role == null ? null : new FluxerRole(role));
   }
 
   @Override public void addRoleToMember(final long memberId, final long roleId) {
