@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component @AllArgsConstructor
 public final class DiscordBotListener extends ListenerAdapter {
   private static final String SOURCE = "discord";
@@ -31,7 +33,7 @@ public final class DiscordBotListener extends ListenerAdapter {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   private final CommandHandler handler;
-  private final SharedResources shared;
+  private final Optional<SharedResources> op;
   private final BatListener listener;
 
   @Override public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
@@ -48,8 +50,10 @@ public final class DiscordBotListener extends ListenerAdapter {
   }
 
   @Override public void onGuildReady(final @NotNull GuildReadyEvent __) {
-    if(shared.isAwaiting(SOURCE))
-      shared.serverReady(SOURCE);
+    op.ifPresent(shared -> {
+      if(shared.isAwaiting(SOURCE))
+        shared.serverReady(SOURCE);
+    });
 
     listener.onServerReady(SOURCE);
   }

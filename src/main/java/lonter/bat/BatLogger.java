@@ -29,11 +29,24 @@ public final class BatLogger extends AppenderBase<ILoggingEvent> {
 
   private static volatile SharedResources shared;
 
+  private static volatile boolean disabled = false;
+
   public static void setSharedResources(final @NotNull SharedResources sharedResources) {
     shared = sharedResources;
   }
 
+  public static void disableLogger() {
+    disabled = true;
+  }
+
   @Override protected void append(final @NotNull ILoggingEvent log) {
+    if(disabled) {
+      if(!buffer.isEmpty())
+        buffer.clear();
+
+      return;
+    }
+
     if(shared == null || !ready.get()) {
       if(shared != null && shared.allReady()) {
         synchronized(this) {
