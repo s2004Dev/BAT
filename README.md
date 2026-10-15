@@ -529,4 +529,5 @@ inside "General" because that's the only available category.
 This project is still heavily a work in progress, you can contribute **BY HAND** (**no LLMs** allowed) by contacting
 me on any of my platform and suggest changes.  
 This project also doesn't have a repo on Maven Central cause I really don't know how to do that and I need to
-investigate it.
+investigate it.  
+I made a [FluxFur server](https://fluxfur.com/invite/KElL5zwo) to discuss about all of this if you want to.
