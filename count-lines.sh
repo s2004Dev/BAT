@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# You can use this script to see how many lines of code are there in this project with this command:
+# ./count-lines.sh ./src java
+
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <path> <mask>"
     exit 1

@@ -22,8 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 * Utility class for easier management of shared resources.
 */
 public abstract class SharedResources {
-  private static final int MSG_LENGTH = 1_000;
-
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   @Value("${app.prefix}")
@@ -37,6 +35,9 @@ public abstract class SharedResources {
 
   @Value("${app.ignoreBots:#{true}}")
   public boolean ignoreBots;
+
+  @Value("${app.logLength:#{1000}}")
+  public int logLength;
 
   private final ConcurrentHashMap<String, BatShard> shards = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, BatServer> servers = new ConcurrentHashMap<>();
@@ -142,19 +143,19 @@ public abstract class SharedResources {
     val chunk = new StringBuilder();
 
     for(val line: text.split("\n")) {
-      if(line.length() > MSG_LENGTH) {
+      if(line.length() > logLength) {
         if(!chunk.isEmpty()) {
           chunks.add(chunk.toString());
           chunk.setLength(0);
         }
 
-        for(var i = 0; i < line.length(); i += MSG_LENGTH)
-          chunks.add(line.substring(i, Math.min(line.length(), i + MSG_LENGTH)));
+        for(var i = 0; i < line.length(); i += logLength)
+          chunks.add(line.substring(i, Math.min(line.length(), i + logLength)));
 
         continue;
       }
 
-      if(chunk.length()+line.length()+1 > MSG_LENGTH) {
+      if(chunk.length()+line.length()+1 > logLength) {
         chunks.add(chunk.toString());
         chunk.setLength(0);
       }
