@@ -24,18 +24,35 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class SharedResources {
   private final Logger log = LoggerFactory.getLogger(getClass());
 
+  /**
+  * This mandatory property contains the prefix of the bot.
+  */
   @Value("${app.prefix}")
   public @NotNull String prefix;
 
+  /**
+   * This optional property contains the default color for embeds, it is set as `null` by default. Must be a
+   * hexadecimal.
+   */
   @Value("${app.embedColor:#{null}}")
   public @Nullable String color;
 
+  /**
+   * This optional property toggles the framework logger, it is set as `false` by default.
+   */
   @Value("${app.logger:#{false}}")
   public boolean logger;
 
+  /**
+   * This optional property tells the framework whether the commands should ignore bots or not, it is set as `true`
+   * by default.
+   */
   @Value("${app.ignoreBots:#{true}}")
   public boolean ignoreBots;
 
+  /**
+   * This optional property tells the framework how long the message of a log can be, it is set as `1000` by default.
+   */
   @Value("${app.logLength:#{1000}}")
   public int logLength;
 
@@ -51,6 +68,12 @@ public abstract class SharedResources {
     this.env = env;
   }
 
+  /**
+   * @param source the source of the property
+   * @param name the name of the property
+   * @return the value of the property
+   * @throws IllegalStateException if the property is null
+   */
   public @NotNull String getValue(final @NotNull String source, final @NotNull String name) {
     val property = "app." + source + "." + name;
     val value = env.getProperty(property);
@@ -61,12 +84,30 @@ public abstract class SharedResources {
     return value;
   }
 
+  /**
+   * @param source the source of the property
+   * @param name the name of the property
+   * @return the value of the property or null
+   */
+  public @Nullable String getValueOrNull(final @NotNull String source, final @NotNull String name) {
+    return env.getProperty("app." + source + "." + name);
+  }
+
+  /**
+   * @param source the source of the shard
+   * @param shard the shard to put into memory
+   */
   public void setShard(final @NotNull String source, final @NotNull BatShard shard) {
     shards.put(source, shard);
   }
 
+  /**
+   * @param source the source of the shard
+   * @return the shard for that specific source
+   * @throws IllegalStateException if the shard is not found
+   */
   public @NotNull BatShard getShard(final @NotNull String source) {
-    val shard = shards.get(source);
+    val shard = getShardOrNull(source);
 
     if(shard == null)
       throw new IllegalStateException(source + " shard is null");
@@ -74,6 +115,19 @@ public abstract class SharedResources {
     return shard;
   }
 
+  /**
+   * @param source the source of the shard
+   * @return the shard for that specific source or null
+   */
+  public @Nullable BatShard getShardOrNull(final @NotNull String source) {
+    return shards.get(source);
+  }
+
+  /**
+   * Use this method to tell the framework it should expect a server for this source to be initialized.
+   * Remember to define an `app.source.mainServer` and an `app.source.logger`.
+   * @param source the source of the server that is initializing
+   */
   public void initServer(final @NotNull String source) {
     sources.add(source);
   }
