@@ -35,6 +35,9 @@ public abstract class SharedResources {
   @Value("${app.logger:#{false}}")
   public boolean logger;
 
+  @Value("${app.ignoreBots#{true}}")
+  public boolean ignoreBots;
+
   private final ConcurrentHashMap<String, BatShard> shards = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, BatServer> servers = new ConcurrentHashMap<>();
   private final Set<String> sources = ConcurrentHashMap.newKeySet();

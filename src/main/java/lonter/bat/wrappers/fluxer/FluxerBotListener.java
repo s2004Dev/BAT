@@ -37,6 +37,9 @@ public final class FluxerBotListener extends ListenerAdapter {
   @Override public void onMessageReceived(final @NotNull MessageReceivedEvent e) {
     val mre = new FluxerMRE(e);
 
+    if(ignoreBots() && mre.author.isBot)
+      return;
+
     try {
       handler.invoke(mre);
       listener.onMessageReceived(mre);
@@ -45,6 +48,10 @@ public final class FluxerBotListener extends ListenerAdapter {
     catch(final @NotNull Exception ex) {
       BatLogger.logMreError(SOURCE, log, mre, ex);
     }
+  }
+
+  private boolean ignoreBots() {
+    return op.map(i -> i.ignoreBots).orElse(true);
   }
 
   @Override public void onGuildReady(final @NotNull GuildReadyEvent __) {
