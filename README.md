@@ -530,4 +530,4 @@ This project is still heavily a work in progress, you can contribute **BY HAND**
 me on any of my platform and suggest changes.  
 This project also doesn't have a repo on Maven Central cause I really don't know how to do that and I need to
 investigate it.  
-I made a [FluxFur server](https://fluxfur.com/invite/KElL5zwo) to discuss about all of this if you want to.
+I made a [FluxFur server](https://fluxfur.com/invite/KElL5zwo) to discuss all of this if you want to.
