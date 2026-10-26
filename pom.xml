@@ -10,7 +10,7 @@
     <version> 4.1.1 </version>
   </parent>
 
-  <groupId> lonter </groupId>
+  <groupId> it.lonter </groupId>
   <artifactId> bat </artifactId>
   <version> 0.1 </version>
   <name> bat </name>
@@ -47,7 +47,7 @@
     </dependency>
 
     <dependency>
-      <groupId> lonter </groupId>
+      <groupId> it.lonter </groupId>
       <artifactId> jfa </artifactId>
       <version> 0.1 </version>
     </dependency>

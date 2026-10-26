@@ -3,7 +3,7 @@
   <include resource = 'org/springframework/boot/logging/logback/defaults.xml'/>
   <include resource = 'org/springframework/boot/logging/logback/console-appender.xml'/>
 
-  <appender name = 'BAT_LOGGER' class = 'lonter.bat.BatLogger'/>
+  <appender name = 'BAT_LOGGER' class = 'it.lonter.bat.BatLogger'/>
 
   <root level = 'INFO'>
     <appender-ref ref = 'CONSOLE'/>

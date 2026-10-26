@@ -1,0 +1,15 @@
+package it.lonter.bat.annotations.parameters.ats;
+
+import it.lonter.bat.annotations.parameters.AtParam;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * This annotation will inject into your function the base event of a message.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER) @AtParam
+public @interface Event { }

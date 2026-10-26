@@ -1,0 +1,20 @@
+package it.lonter.bat.annotations.parameters.impls;
+
+import it.lonter.bat.batobjs.BatMRE;
+import it.lonter.bat.annotations.parameters.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
+
+import java.lang.annotation.Annotation;
+
+@ImplParam @Component
+public final class Event extends CommandArg {
+  @Override public @NotNull Class<? extends Annotation> getAnnotationType() {
+    return it.lonter.bat.annotations.parameters.ats.Event.class;
+  }
+
+  @Override public @NotNull Object value(final @NotNull BatMRE e, final @NotNull Annotation at) {
+    return e;
+  }
+}

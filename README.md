@@ -59,7 +59,7 @@ framework know where to find the classes and methods. You will need to do it lik
 
 @ComponentScan(basePackages = {
   "your.application.package",
-  "lonter.bat"
+  "it.lonter.bat"
 })
 
 public class YourBot {
@@ -375,13 +375,13 @@ not the user who sent the message. By default, it's set on false (no mention).
 The BAT Wrappers objects are what allows the framework to work on multiple platforms at the same time, in order to
 achieve this result, many objects from other platforms' SDKs have been wrapped into batobjs.
 
-You can easily find them into the source code at `lonter.bat.batobjs`. If you need more specific objects you can ask
+You can easily find them into the source code at `it.lonter.bat.batobjs`. If you need more specific objects you can ask
 me to add them as I, for simplicity, only added a few.
 
 ### How do I extend support to a platform that isn't supported?
 
 In order to extend support to a platform that isn't supported yet, you will have to extend all the batobjs as shown
-in `lonter.bat.wrappers`.
+in `it.lonter.bat.wrappers`.
 
 As this topic might be a bit complicated to explain, I accept suggestion for this file and I will gladly explain via
 personal messages how everything works on any of my platforms.

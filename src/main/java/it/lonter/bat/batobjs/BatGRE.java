@@ -1,0 +1,17 @@
+package it.lonter.bat.batobjs;
+
+import lombok.AllArgsConstructor;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * BatGenericReactionEvent
+ */
+@AllArgsConstructor
+public abstract class BatGRE {
+  public final long messageId;
+  public final @NotNull BatUser author;
+  public final @NotNull String emojiId;
+  public final @NotNull String source;
+  public final @NotNull String eventType;
+}
