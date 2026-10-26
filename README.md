@@ -34,7 +34,7 @@ If you want to use JFA inside your Maven project as a dependency, you need to pa
 <dependency>
   <groupId> it.lonter </groupId>
   <artifactId> bat </artifactId>
-  <version> 0.1.0 </version>
+  <version> 0.1.1 </version>
 </dependency>
 ```
 
