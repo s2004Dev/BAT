@@ -87,13 +87,20 @@ public final class BatLogger extends AppenderBase<ILoggingEvent> {
     while((bufferedEvent = buffer.poll()) != null)
       backLog.append(format(bufferedEvent)).append("\n");
 
-    if(!backLog.isEmpty())
-      shared.broadcastLog(backLog.toString());
+    send(backLog.toString());
   }
 
   private void send(final @NotNull ILoggingEvent log) {
-    if(shared != null)
-      shared.broadcastLog(format(log));
+    send(format(log));
+  }
+
+  private void send(final @NotNull String log) {
+    try {
+      if(shared != null)
+        shared.broadcastLog(log);
+    }
+
+    catch(final @NotNull Exception ignored) { }
   }
 
   public @NotNull String format(final @NotNull ILoggingEvent log) {
