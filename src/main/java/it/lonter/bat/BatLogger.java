@@ -91,6 +91,9 @@ public final class BatLogger extends AppenderBase<ILoggingEvent> {
   }
 
   private void send(final @NotNull ILoggingEvent log) {
+    if(log.getLoggerName().contains(getClass().getCanonicalName()))
+      return;
+
     send(format(log));
   }
 
