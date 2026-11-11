@@ -189,7 +189,8 @@ public abstract class SharedResources {
       return;
 
     for(val chunk: splitIntoChunks(log))
-      broadcast.forEach(i -> i.sendMessage("```ansi\n" + chunk + "\n```"));
+      for(val channel: broadcast)
+        channel.sendMessage("```ansi\n" + chunk + "\n```");
   }
 
   private @NotNull ArrayList<String> splitIntoChunks(final @NotNull String text) {
